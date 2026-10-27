@@ -3,25 +3,8 @@ import { ZooopLogo } from './ZooopLogo'
 import { SOCIAL_ICONS } from './SocialIcons'
 import { FOCUS_POINTS } from '../data/focusPoints'
 
-const SOCIAL_LINKS = [
-  {
-    id: 'douyin',
-    label: '抖音',
-    href: 'https://www.douyin.com/user/MS4wLjABAAAAlmQDgHf0NlbsjrfWENm8LyrIikxSRRq7mzlzQSIStQJkV7Ju52B6A55zw5TUDU5d',
-  },
-  {
-    id: 'bilibili',
-    label: 'B站',
-    href: 'https://space.bilibili.com/275344092?spm_id_from=333.937.0.0',
-  },
-  {
-    id: 'xiaohongshu',
-    label: '小红书',
-    href: 'https://www.xiaohongshu.com/user/profile/5ceba8c8000000000502fd69',
-  },
-]
-
-// 履历数据（双语）。英文为译稿，可按需润色。
+// Résumé data. Each entry lines up with one camera stop in the 3D model
+// (see data/focusPoints.ts), so keep exactly 5 entries unless the glb changes.
 interface ResumeGroup {
   heading?: string
   logo?: string
@@ -39,107 +22,79 @@ interface ResumeEntry {
   points?: string[]
   groups?: ResumeGroup[]
 }
+
+const ENTRIES: ResumeEntry[] = [
+  {
+    period: '2019 – 2023',
+    place: 'Education',
+    groups: [
+      {
+        heading: 'BBA, Marketing',
+        sub: 'MES Asmabi College, Kodungallur · 2019 – 2022',
+      },
+      {
+        heading: 'Advanced Diploma in Digital Marketing',
+        sub: 'Dotin Digital Academy · 2022 – 2023',
+      },
+    ],
+  },
+  {
+    period: 'Jul 2022 – Jan 2024',
+    place: 'Kerala, India',
+    groups: [
+      {
+        heading: 'Digital Marketing Intern',
+        sub: 'Dotin Digital Academy · Thrissur · Jul 2022 – Mar 2023',
+        items: ['Started in campaign execution and social media management.'],
+      },
+      {
+        heading: 'Digital Marketing Executive',
+        sub: 'Xylem Learning · Kozhikode · Mar 2023 – Jan 2024',
+        items: ['Ran paid campaigns and lead generation for an ed-tech brand.'],
+      },
+    ],
+  },
+  {
+    period: '2022 – Present',
+    place: 'Independent & agency clients',
+    role: 'Freelance Performance Marketer · Remote',
+    points: [
+      'Strategy, creative and paid media for e-commerce, education, real estate, automotive, media and fitness brands.',
+    ],
+  },
+  {
+    period: 'Jan 2024 – Mar 2026',
+    place: 'Kerala, India',
+    groups: [
+      {
+        heading: 'Branding Team Lead',
+        sub: 'Dotcom Creativez',
+        items: ['Led the branding team, delivering brand identity, content and ad campaigns for agency clients.'],
+      },
+      {
+        heading: 'Digital Marketing Trainer',
+        sub: 'Dotin Digital Academy',
+        items: [
+          'Trained and mentored students in social media, Meta Ads and performance marketing, while running the academy’s own admission campaigns.',
+        ],
+      },
+    ],
+  },
+  {
+    period: 'Mar 2026 – Present',
+    place: 'Al Aseel Business Hub · Dubai',
+    role: 'Head of Digital Marketing',
+    points: [
+      'Lead digital strategy, brand growth and lead generation for a UAE business-setup firm.',
+      'Performance campaigns, social media, content, SEO, Google Ads, Meta Ads and the website.',
+    ],
+  },
+]
+
+// The site is English-only; both language keys share the same data.
 const RESUME: Record<'en' | 'zh', { title: string; entries: ResumeEntry[] }> = {
-  en: {
-    title: 'Résumé',
-    entries: [
-      {
-        period: '2013 – 2017',
-        place: 'Sun Yat-sen University',
-        role: 'B.S. in Software Engineering',
-      },
-      {
-        period: '2017 – 2020',
-        place: 'HOTSAR Studio · Shanghai',
-        role: 'Co-founder',
-        logo: { src: `${import.meta.env.BASE_URL}images/hotsar.jpg`, alt: 'HOTSAR' },
-        points: [
-          'Co-founder · team of 20+',
-          'Clients: Alibaba brands, Tencent, NetEase, DiDi, China Resources, McDonald’s…',
-          'Work: development / creative direction / animation / team management',
-        ],
-      },
-      {
-        period: '2020 – 2025',
-        place: 'Bad Printer Studio · Shenzhen',
-        role: 'Founder',
-        logo: { src: `${import.meta.env.BASE_URL}images/bp.png`, alt: 'Bad Printer Studio' },
-        points: [
-          'Founder · team of 14',
-          'Clients: Honor of Kings / Trip.com / ByteDance / Kuaishou / VIVO / Tecno / Xiaomi / IM Motors…',
-          'Work: team management / creative direction / animation / development',
-        ],
-      },
-      {
-        period: '2025 – Now',
-        place: 'Content Creator',
-        groups: [
-          {
-            heading: '小郑还挺忙',
-            logoImg: `${import.meta.env.BASE_URL}images/buzyzheng.png`,
-            sub: 'tech-DIY creator',
-            items: ['120K on Douyin · 87K on Bilibili · 23K on Xiaohongshu'],
-            links: SOCIAL_LINKS,
-          },
-        ],
-      },
-      {
-        period: '2026 – Now',
-        place: 'Indie Developer',
-        groups: [{ logo: 'zooop', sub: 'AI creation platform', link: 'https://zooop.ai/' }],
-      },
-    ],
-  },
-  zh: {
-    title: 'Résumé',
-    entries: [
-      {
-        period: '2013 – 2017',
-        place: '中山大学',
-        role: '软件工程 · 本科',
-      },
-      {
-        period: '2017 – 2020',
-        place: 'HOTSAR 工作室 · 上海',
-        role: '联合创始人',
-        logo: { src: `${import.meta.env.BASE_URL}images/hotsar.jpg`, alt: 'HOTSAR' },
-        points: [
-          '联合创始人，团队人数 20+',
-          '服务客户：阿里系品牌、腾讯、网易、滴滴、华润、麦当劳…',
-          '负责：技术开发 / 创意策划 / 动画制作 / 团队管理',
-        ],
-      },
-      {
-        period: '2020 – 2025',
-        place: '坏打印机工作室 · 深圳',
-        role: '创始人',
-        logo: { src: `${import.meta.env.BASE_URL}images/bp.png`, alt: '坏打印机工作室' },
-        points: [
-          '创始人，团队人数 14',
-          '服务客户：王者荣耀 / 携程 / 字节 / 快手 / VIVO / 传音 / 小米…',
-          '负责：团队管理 / 创意策划 / 动画制作 / 技术开发',
-        ],
-      },
-      {
-        period: '2025 – 至今',
-        place: '自媒体博主',
-        groups: [
-          {
-            heading: '小郑还挺忙',
-            logoImg: `${import.meta.env.BASE_URL}images/buzyzheng.png`,
-            sub: '科技 DIY 博主',
-            items: ['抖音 12 万 · B站 8.7 万 · 小红书 2.3 万 关注'],
-            links: SOCIAL_LINKS,
-          },
-        ],
-      },
-      {
-        period: '2026 – 至今',
-        place: '独立开发',
-        groups: [{ logo: 'zooop', sub: 'AI 创作平台', link: 'https://zooop.ai/' }],
-      },
-    ],
-  },
+  en: { title: 'Résumé', entries: ENTRIES },
+  zh: { title: 'Résumé', entries: ENTRIES },
 }
 
 // 履历条目依次对应 glb 里的聚焦锚点（相机停靠点），顺序须与 entries 一致。

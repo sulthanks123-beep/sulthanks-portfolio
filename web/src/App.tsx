@@ -22,20 +22,14 @@ function Backdrop() {
 
 type Lang = 'en' | 'zh'
 
-const COPY = {
-  en: {
-    title: 'About Sen',
-    paragraphs: [
-      "I'm Sen — a creative technologist living where code meets art. I spend my days around coding, creativity, playful interaction & design, and CG work. I love studying and combining skills across different fields — to create, and to explore more possibilities.",
-    ],
-  },
-  zh: {
-    title: 'About Sen',
-    paragraphs: [
-      '我是 Sen——一个游走在代码与艺术之间的创意技术人。我常年和 Coding、创意、有趣的交互 & 设计、CG 创作等打交道，喜欢研究并组合不同领域的技能，来创造并探索更多可能性。',
-    ],
-  },
+// About copy. The site is English-only; both language keys share the same text.
+const ABOUT = {
+  title: 'About Sulthan',
+  paragraphs: [
+    "I'm Sulthan — a performance marketer and growth strategist for founders. I build content and ads that convert, with Meta Ads, content and strategy behind 20+ brands. Based in Dubai, UAE. From Kerala, India.",
+  ],
 }
+const COPY = { en: ABOUT, zh: ABOUT }
 
 function Hero({ lang, cueOpacity }: { lang: Lang; cueOpacity: MotionValue<number> }) {
   const { title, paragraphs } = COPY[lang]
@@ -92,7 +86,7 @@ function LangToggle({ lang, onToggle }: { lang: Lang; onToggle: () => void }) {
 }
 
 export default function App() {
-  const [lang, setLang] = useState<Lang>('zh')
+  const [lang, setLang] = useState<Lang>('en')
   const { scrollY } = useScroll()
   // 作品区蒙层：以作品区顶部从视口底进入到视口中部的进度，驱动 3D 渐暗 + 模糊
   const worksRef = useRef(null)
@@ -159,7 +153,7 @@ export default function App() {
         aria-hidden="true"
       /> */}
 
-      {/* 中英切换暂时隐藏，默认中文 */}
+      {/* Language toggle hidden; the site is English-only */}
       {/* <LangToggle lang={lang} onToggle={() => setLang((l) => (l === 'en' ? 'zh' : 'en'))} /> */}
 
       {/* 首屏装饰：发丝内框 + 四角定位标 + 角标元数据（随滚动淡出） */}
@@ -170,12 +164,12 @@ export default function App() {
         <span className="hero-mark bl">+</span>
         <span className="hero-mark br">+</span>
         <div className="hero-meta hm-tl">
-          <span className="hm-name">Sen Zheng 郑越升</span>
-          <span>Creative Technologist</span>
+          <span className="hm-name">Sulthan K S</span>
+          <span>Performance Marketer</span>
         </div>
         <div className="hero-meta hm-tr">Portfolio — 2026</div>
-        <div className="hero-meta hm-bl">Code · Art · Play</div>
-        <div className="hero-meta hm-right">Based in Shenzhen</div>
+        <div className="hero-meta hm-bl">Content · Ads · Strategy</div>
+        <div className="hero-meta hm-right">Based in Dubai, UAE</div>
       </motion.div>
 
       {/* 全屏胶片噪点蒙层（multiply 混合） */}
