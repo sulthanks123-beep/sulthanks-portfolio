@@ -46,6 +46,7 @@ const ENTRIES: ResumeEntry[] = [
       },
       {
         heading: 'Advanced Diploma in Digital Marketing',
+        wordmark: { src: LOGO('dotin.webp'), alt: 'Dotin Digital Academy' },
         sub: 'Dotin Digital Academy · 2022 – 2023',
       },
     ],
@@ -56,6 +57,7 @@ const ENTRIES: ResumeEntry[] = [
     groups: [
       {
         heading: 'Digital Marketing Intern',
+        wordmark: { src: LOGO('dotin.webp'), alt: 'Dotin Digital Academy' },
         sub: 'Dotin Digital Academy · Thrissur · Jul 2022 – Mar 2023',
         items: ['Started in campaign execution and social media management.'],
       },
@@ -87,6 +89,7 @@ const ENTRIES: ResumeEntry[] = [
       },
       {
         heading: 'Digital Marketing Trainer',
+        wordmark: { src: LOGO('dotin.webp'), alt: 'Dotin Digital Academy' },
         sub: 'Dotin Digital Academy',
         items: [
           'Trained and mentored students in social media, Meta Ads and performance marketing, while running the academy’s own admission campaigns.',
