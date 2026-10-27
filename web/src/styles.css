@@ -1531,3 +1531,18 @@ canvas {
     font-size: 11.5px;
   }
 }
+
+/* Company wordmark logos (wide, transparent PNG/WebP) */
+.tl-wordmark {
+  display: block;
+  height: 30px;
+  width: auto;
+  max-width: 180px;
+  object-fit: contain;
+  object-position: left center;
+  margin-top: 0.9em;
+}
+
+.tl-logos {
+  flex-wrap: wrap;
+}

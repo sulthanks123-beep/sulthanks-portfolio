@@ -3,12 +3,23 @@ import { ZooopLogo } from './ZooopLogo'
 import { SOCIAL_ICONS } from './SocialIcons'
 import { FOCUS_POINTS } from '../data/focusPoints'
 
+const LOGO = (name: string) => `${import.meta.env.BASE_URL}images/logos/${name}`
+
+const CONTACT_LINKS = [
+  { id: 'linkedin', label: 'LinkedIn', href: 'https://www.linkedin.com/in/sulthan-ks/' },
+  { id: 'instagram', label: 'Instagram @_.sulth4n._', href: 'https://www.instagram.com/_.sulth4n._/' },
+  { id: 'email', label: 'sulthansalavudeen@gmail.com', href: 'mailto:sulthansalavudeen@gmail.com' },
+  { id: 'phone', label: 'Call (UAE) +971 50 605 2016', href: 'tel:+971506052016' },
+  { id: 'whatsapp', label: 'WhatsApp (India) +91 97458 50621', href: 'https://wa.me/919745850621' },
+]
+
 // Résumé data. Each entry lines up with one camera stop in the 3D model
 // (see data/focusPoints.ts), so keep exactly 5 entries unless the glb changes.
 interface ResumeGroup {
   heading?: string
   logo?: string
   logoImg?: string
+  wordmark?: { src: string; alt: string }
   sub?: string
   link?: string
   items?: string[]
@@ -19,6 +30,7 @@ interface ResumeEntry {
   place: string
   role?: string
   logo?: { src: string; alt: string }
+  wordmark?: { src: string; alt: string }
   points?: string[]
   groups?: ResumeGroup[]
 }
@@ -49,6 +61,7 @@ const ENTRIES: ResumeEntry[] = [
       },
       {
         heading: 'Digital Marketing Executive',
+        wordmark: { src: LOGO('xylem.webp'), alt: 'Xylem Learning' },
         sub: 'Xylem Learning · Kozhikode · Mar 2023 – Jan 2024',
         items: ['Ran paid campaigns and lead generation for an ed-tech brand.'],
       },
@@ -68,6 +81,7 @@ const ENTRIES: ResumeEntry[] = [
     groups: [
       {
         heading: 'Branding Team Lead',
+        wordmark: { src: LOGO('dotcom.webp'), alt: 'Dotcom Creativez' },
         sub: 'Dotcom Creativez',
         items: ['Led the branding team, delivering brand identity, content and ad campaigns for agency clients.'],
       },
@@ -83,10 +97,21 @@ const ENTRIES: ResumeEntry[] = [
   {
     period: 'Mar 2026 – Present',
     place: 'Al Aseel Business Hub · Dubai',
+    wordmark: { src: LOGO('al-aseel.webp'), alt: 'Al Aseel Business Hub' },
     role: 'Head of Digital Marketing',
     points: [
       'Lead digital strategy, brand growth and lead generation for a UAE business-setup firm.',
       'Performance campaigns, social media, content, SEO, Google Ads, Meta Ads and the website.',
+    ],
+    groups: [
+      {
+        heading: 'Get in touch',
+        items: [
+          'sulthansalavudeen@gmail.com',
+          'UAE +971 50 605 2016 · WhatsApp (India) +91 97458 50621',
+        ],
+        links: CONTACT_LINKS,
+      },
     ],
   },
 ]
@@ -142,6 +167,9 @@ function Group({ group }: { group: ResumeGroup }) {
         {heading}
         {group.sub && <span className="tl-group-sub">{group.sub}</span>}
       </div>
+      {group.wordmark && (
+        <img className="tl-wordmark" src={group.wordmark.src} alt={group.wordmark.alt} loading="lazy" />
+      )}
       {group.items && (
         <ul className="tl-points">
           {group.items.map((it, i) => (
@@ -158,8 +186,7 @@ function Group({ group }: { group: ResumeGroup }) {
                 key={l.id}
                 className="tl-logo"
                 href={l.href}
-                target="_blank"
-                rel="noopener noreferrer"
+                {...(l.href.startsWith('http') ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
                 aria-label={l.label}
                 title={l.label}
               >
@@ -200,6 +227,15 @@ function Entry({ entry, index }: { entry: ResumeEntry; index: number }) {
           )}
           <h3 className="tl-place">{entry.place}</h3>
         </motion.div>
+        {entry.wordmark && (
+          <motion.img
+            className="tl-wordmark"
+            src={entry.wordmark.src}
+            alt={entry.wordmark.alt}
+            loading="lazy"
+            variants={itemV}
+          />
+        )}
         {entry.role && (
           <motion.div className="tl-role" variants={itemV}>
             {entry.role}
