@@ -64,7 +64,7 @@ function GradientBackground() {
   // glb 相机视角很窄(~23°)，只看到渐变中间一条；陡度把可见窄带拉伸出完整过渡
   const top = '#000000'
   const bottom = '#7644ff'
-  const steep = 4.5
+  const steep = 2.5
 
   const uniforms = useMemo(
     () => ({
@@ -99,7 +99,7 @@ function GradientBackground() {
           varying vec3 vDir;
           void main() {
             // 以地平线(y=0)为中心按陡度拉伸，narrow-fov 下也能看到完整过渡
-            float t = clamp(vDir.y * uSteep * 0.5 + 0.62, 0.0, 1.0);
+            float t = smoothstep(0.0, 1.0, clamp(vDir.y * uSteep * 0.5 + 0.95, 0.0, 1.0));
             gl_FragColor = vec4(mix(uBottom, uTop, t), 1.0);
           }
         `}
