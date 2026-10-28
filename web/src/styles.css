@@ -1432,13 +1432,13 @@ canvas {
 
 .lr-arc {
   fill: none;
-  stroke: #6f906f;
+  stroke: #7644ff;
   stroke-width: 3;
   stroke-linecap: round;
   transform: rotate(-90deg);
   transform-origin: 50% 50%;
   transition: stroke-dashoffset 0.35s ease;
-  filter: drop-shadow(0 0 6px rgba(111, 144, 111, 0.55));
+  filter: drop-shadow(0 0 6px rgba(118, 68, 255, 0.55));
 }
 
 @keyframes lrSpin {
