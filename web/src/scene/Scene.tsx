@@ -1,12 +1,55 @@
 import { Suspense, useMemo, useRef, useEffect, type MutableRefObject } from 'react'
 import { useThree, useFrame } from '@react-three/fiber'
-import { useGLTF } from '@react-three/drei'
+import { useGLTF, useTexture } from '@react-three/drei'
 import { EffectComposer, Bloom, DepthOfField, SMAA } from '@react-three/postprocessing'
 import * as THREE from 'three'
 import Env from './Env'
 import { FOCUS_POINTS, FRAMES_PER_NODE } from '../data/focusPoints'
 
 useGLTF.preload(`${import.meta.env.BASE_URL}models/me.glb`)
+useTexture.preload(`${import.meta.env.BASE_URL}models/avatar.webp`)
+
+// The character is a 2D cut-out illustration (public/models/avatar.webp) placed where the
+// original 3D character stood, in the local space of the glb's `man` node so it follows
+// manAction. Sizes are in that local space; the glb only supplies camera + focus anchors.
+const AVATAR = {
+  url: `${import.meta.env.BASE_URL}models/avatar.webp`,
+  width: 1.65, // plane size (image is 3:4)
+  height: 2.2,
+  y: -0.054, // plane centre; puts the eyes at the old eye height (≈0.486)
+  z: 0.2, // just behind the focus anchors so depth of field keeps the face sharp
+  bulge: 0.12, // how far the soft "pillow" depth pushes the middle of the figure forward
+  follow: 0.8, // 1 = always face the camera, lower lets a little perspective show
+}
+
+// Build a subdivided plane whose vertices bulge forward where the image is opaque,
+// so the flat cut-out picks up some volume as the camera moves around it.
+function makeAvatarGeometry(img: any): THREE.PlaneGeometry {
+  const sx = 48
+  const sy = 64
+  const geo = new THREE.PlaneGeometry(AVATAR.width, AVATAR.height, sx, sy)
+  try {
+    const c = document.createElement('canvas')
+    c.width = sx + 1
+    c.height = sy + 1
+    const ctx = c.getContext('2d')!
+    ctx.filter = 'blur(3px)'
+    ctx.drawImage(img, 0, 0, c.width, c.height)
+    const data = ctx.getImageData(0, 0, c.width, c.height).data
+    const pos = geo.attributes.position
+    for (let i = 0; i < pos.count; i++) {
+      const ix = i % (sx + 1)
+      const iy = Math.floor(i / (sx + 1))
+      const a = data[(iy * c.width + ix) * 4 + 3] / 255
+      pos.setZ(i, Math.sqrt(a) * AVATAR.bulge)
+    }
+    pos.needsUpdate = true
+    geo.computeVertexNormals()
+  } catch {
+    // canvas unavailable: fall back to a flat plane
+  }
+  return geo
+}
 
 // 聚焦锚点（glb 内 focus-* 空对象），顺序对应履历节点；名单是唯一真源，见 data/focusPoints.ts
 const POINTS = FOCUS_POINTS as readonly string[]
@@ -134,7 +177,7 @@ function Man2({
   }
 
   const eye = {
-    enabled: true,
+    enabled: false, // the illustration has no separate eyes to rotate
     gain: 3,
     maxYaw: 15,
     maxPitch: 8,
@@ -220,6 +263,28 @@ function Man2({
       },
     }
   }, [scene])
+
+  // Cut-out character attached to the glb's `man` node
+  const avatarTex = useTexture(AVATAR.url) as THREE.Texture
+  const avatar = useMemo(() => {
+    avatarTex.colorSpace = THREE.SRGBColorSpace
+    avatarTex.anisotropy = 4
+    const mat = new THREE.MeshBasicMaterial({
+      map: avatarTex,
+      transparent: true,
+      alphaTest: 0.35,
+      depthWrite: true,
+      toneMapped: false,
+      side: THREE.DoubleSide,
+    })
+    const mesh = new THREE.Mesh(makeAvatarGeometry(avatarTex.image), mat)
+    mesh.name = 'avatar'
+    mesh.position.set(0, AVATAR.y, AVATAR.z)
+    const host = model.getObjectByName('man') || model
+    host.add(mesh)
+    return mesh
+  }, [model, avatarTex])
+  const avatarLocal = useRef(new THREE.Vector3())
 
   // 相机动画总帧数：从 CameraAction clip 读（回退到最长 clip / 默认履历+入场+横移），不写死。
   // 作品区帧段 = [RESUME_FRAMES, totalFrames]，长度随 glb 而定（当前 me.glb 为 100 帧）。
@@ -456,6 +521,14 @@ function Man2({
         camera.fov = glbCam.fov
         camera.updateProjectionMatrix()
       }
+    }
+
+    // Turn the cut-out (around its vertical axis) toward the camera
+    if (avatar.parent) {
+      camera.getWorldPosition(avatarLocal.current)
+      avatar.parent.worldToLocal(avatarLocal.current)
+      const yaw = Math.atan2(avatarLocal.current.x, avatarLocal.current.z - AVATAR.z)
+      avatar.rotation.y = yaw * AVATAR.follow
     }
 
     // 4) 眼睛跟随（用当前激活相机做屏幕投影）；移动端 / 触屏则跳过
