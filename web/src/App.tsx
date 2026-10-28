@@ -3,7 +3,7 @@ import { Canvas } from '@react-three/fiber'
 import { motion, useScroll, useTransform, type MotionValue } from 'framer-motion'
 import * as THREE from 'three'
 import Scene from './scene/Scene'
-import NoiseOverlay from './ui/NoiseOverlay'
+// import NoiseOverlay from './ui/NoiseOverlay'
 import Resume from './ui/Resume'
 import Works from './ui/Works'
 import LoadingScreen from './ui/LoadingScreen'
@@ -172,8 +172,8 @@ export default function App() {
         <div className="hero-meta hm-right">Based in Dubai, UAE</div>
       </motion.div>
 
-      {/* 全屏胶片噪点蒙层（multiply 混合） */}
-      <NoiseOverlay />
+      {/* Film-grain overlay turned off: it showed as dark specks on the character's face */}
+      {/* <NoiseOverlay /> */}
 
       {/* 可滚动内容 */}
       <main className="content">
