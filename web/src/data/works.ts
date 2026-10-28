@@ -71,9 +71,9 @@ const EN: WorksLang = {
       title: 'Performance Marketing',
       tagline: 'Lead generation · Paid media',
       items: [
-        { name: 'Al Aseel Business Hub', meta: 'Business setup · UAE', slug: 'al-aseel' },
+        { name: 'Al Aseel Business Hub', meta: 'Business setup · WhatsApp lead gen', slug: 'al-aseel' },
         { name: 'Xylem Learning', meta: 'Ed-tech · Paid campaigns', slug: 'xylem' },
-        { name: 'Dotin Digital Academy', meta: 'Admission campaigns', slug: 'dotin-admissions' },
+        { name: 'Dotin Digital Academy', meta: '35.9M impressions · 14.4% search CTR', slug: 'dotin-admissions' },
       ],
       awards: ['Meta Ads', 'Google Ads', 'SEO'],
     },
@@ -96,13 +96,11 @@ const EN: WorksLang = {
       no: '03',
       title: 'Freelance',
       tagline: '20+ brands',
-      groups: [
-        {
-          heading: 'Industries',
-          items: ['E-commerce', 'Education', 'Real estate', 'Automotive', 'Media', 'Fitness'],
-        },
+      items: [
+        { name: 'WayHomes', meta: 'D2C e-commerce · Meta Ads', slug: 'wayhomes' },
+        { name: 'Offenso Hackers Academy', meta: 'Education · Snapchat Ads', slug: 'offenso' },
       ],
-      footer: 'Strategy · Creative · Paid media',
+      footer: 'E-commerce · Education · Real estate · Automotive · Media · Fitness',
     },
     {
       id: 'training',

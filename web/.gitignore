@@ -12,6 +12,10 @@ dist-ssr
 # 仅保留板块封面占位图（public/works/covers/），其余媒体请自行放置或走 CDN。
 public/works/*
 !public/works/covers/
+# Project images used by the case-study pages
+!public/works/al-aseel/
+!public/works/wayhomes/
+!public/works/dotin-admissions/
 
 # 压缩脚本日志
 scripts/compress-media.log
