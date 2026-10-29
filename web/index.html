@@ -13,6 +13,15 @@
   </head>
   <body>
     <div id="root"></div>
+    <!-- Static copy of the contact form so Netlify Forms can detect it at deploy time -->
+    <form name="contact" data-netlify="true" netlify-honeypot="bot-field" hidden>
+      <input name="bot-field" />
+      <input name="name" />
+      <input name="contact" />
+      <input name="business" />
+      <select name="budget"><option></option></select>
+      <textarea name="message"></textarea>
+    </form>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

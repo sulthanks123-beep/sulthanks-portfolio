@@ -6,6 +6,7 @@ import Scene from './scene/Scene'
 // import NoiseOverlay from './ui/NoiseOverlay'
 import Resume from './ui/Resume'
 import Works from './ui/Works'
+import Extras from './ui/Extras'
 import LoadingScreen from './ui/LoadingScreen'
 import { useStore } from './store'
 
@@ -180,6 +181,7 @@ export default function App() {
         <Hero lang={lang} cueOpacity={cueOpacity} />
         <Resume lang={lang} />
         <Works lang={lang} innerRef={worksRef} />
+        <Extras />
       </main>
     </>
   )
