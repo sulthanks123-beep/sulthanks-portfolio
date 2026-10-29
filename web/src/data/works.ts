@@ -122,7 +122,12 @@ export const WORKS: Record<'zh' | 'en', WorksLang> = { en: EN, zh: EN }
 
 // Optional full-height cover per section, keyed by section id, from public/works/covers/.
 // Sections without a cover show a numbered gradient placeholder.
-export const SECTION_COVERS: Record<string, string> = {}
+export const SECTION_COVERS: Record<string, string> = {
+  performance: `${import.meta.env.BASE_URL}works/covers/performance.webp`,
+  branding: `${import.meta.env.BASE_URL}works/covers/branding.webp`,
+  freelance: `${import.meta.env.BASE_URL}works/covers/freelance.webp`,
+  training: `${import.meta.env.BASE_URL}works/covers/training.webp`,
+}
 
 // 统计一个板块的作品数（items 或 groups 求和），用于索引行 hover 显示
 export function sectionCount(section: WorkSection): number {
