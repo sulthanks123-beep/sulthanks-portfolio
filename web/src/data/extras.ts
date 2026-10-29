@@ -66,13 +66,8 @@ export const STEPS: Step[] = [
   { title: 'Optimise', body: 'Weekly tuning and clear reports: cut what does not perform, scale what does.' },
 ]
 
-export const CREATIVES: Creative[] = [
-  {
-    src: 'works/al-aseel/ad-creatives.webp',
-    alt: 'Al Aseel Facebook and Instagram video ads',
-    caption: 'Al Aseel · WhatsApp lead ads on Facebook and Instagram',
-  },
-]
+// Ad creatives gallery: the section stays hidden while this list is empty.
+export const CREATIVES: Creative[] = []
 
 // Only real client quotes. The section stays hidden while this list is empty.
 export const TESTIMONIALS: Testimonial[] = []
