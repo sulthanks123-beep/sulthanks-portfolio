@@ -123,32 +123,34 @@ function Testimonials() {
   )
 }
 
-// Netlify Forms: the static twin of this form lives in index.html so Netlify can detect it.
-function encode(data: FormData) {
-  const p = new URLSearchParams()
-  data.forEach((v, k) => p.append(k, String(v)))
-  return p.toString()
+// The form doesn't post anywhere: it opens WhatsApp with the visitor's details typed in,
+// addressed to CONTACT.whatsapp, and the visitor presses send there.
+function whatsappText(data: FormData) {
+  const v = (k: string) => String(data.get(k) || '').trim()
+  const lines = [
+    `Hi Sulthan, I found you through your portfolio.`,
+    '',
+    `Name: ${v('name')}`,
+    `Contact: ${v('contact')}`,
+    v('business') ? `Business: ${v('business')}` : null,
+    v('budget') ? `Monthly ad budget: ${v('budget')}` : null,
+    '',
+    v('message'),
+  ]
+  return lines.filter((l) => l !== null).join('\n')
 }
 
 function Contact() {
-  const [state, setState] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle')
+  const [sent, setSent] = useState(false)
 
-  const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    const form = e.currentTarget
-    setState('sending')
-    try {
-      const res = await fetch('/', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: encode(new FormData(form)),
-      })
-      if (!res.ok) throw new Error(String(res.status))
-      form.reset()
-      setState('sent')
-    } catch {
-      setState('error')
-    }
+    const url = `${CONTACT.whatsapp}?text=${encodeURIComponent(whatsappText(new FormData(e.currentTarget)))}`
+    // open straight from the click so browsers don't block it; fall back to same-tab
+    const win = window.open(url, '_blank')
+    if (win) win.opener = null
+    else window.location.href = url
+    setSent(true)
   }
 
   return (
@@ -181,18 +183,9 @@ function Contact() {
           className="ex-form glass"
           onPointerMove={spot}
           name="contact"
-          method="POST"
-          data-netlify="true"
-          netlify-honeypot="bot-field"
           onSubmit={onSubmit}
           {...reveal}
         >
-          <input type="hidden" name="form-name" value="contact" />
-          <p className="ex-hp" aria-hidden="true">
-            <label>
-              Leave this empty <input name="bot-field" tabIndex={-1} autoComplete="off" />
-            </label>
-          </p>
           <label className="ex-field">
             <span>Name</span>
             <input name="name" required autoComplete="name" />
@@ -220,19 +213,14 @@ function Contact() {
             <span>What do you need?</span>
             <textarea name="message" rows={4} required />
           </label>
-          <button className="ex-btn ex-btn-primary ex-field-wide" type="submit" disabled={state === 'sending'}>
-            {state === 'sending' ? 'Sending…' : 'Send message'}
+          <button className="ex-btn ex-btn-primary ex-field-wide" type="submit">
+            Send on WhatsApp
           </button>
-          {state === 'sent' && <p className="ex-form-note is-ok ex-field-wide">Thanks! I'll get back to you soon.</p>}
-          {state === 'error' && (
-            <p className="ex-form-note is-err ex-field-wide">
-              That didn't go through. Please{' '}
-              <a href={CONTACT.whatsapp} target="_blank" rel="noopener noreferrer">
-                message me on WhatsApp
-              </a>{' '}
-              or email <a href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a>.
-            </p>
-          )}
+          <p className={`ex-form-note ex-field-wide${sent ? ' is-ok' : ''}`}>
+            {sent
+              ? 'WhatsApp opened with your message. Press send there and I’ll reply soon.'
+              : 'This opens WhatsApp with your details filled in. Just press send.'}
+          </p>
         </motion.form>
       </div>
     </section>

@@ -2010,6 +2010,7 @@ canvas {
 }
 
 .ex-form-note {
+  color: var(--muted);
   font-size: 14px;
   line-height: 1.6;
 }
