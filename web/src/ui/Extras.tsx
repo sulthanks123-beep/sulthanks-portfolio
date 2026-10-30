@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from 'react'
+import { useState, type FormEvent, type PointerEvent } from 'react'
 import { motion } from 'framer-motion'
 import { STATS, SERVICES, STEPS, CREATIVES, TESTIMONIALS, CONTACT } from '../data/extras'
 
@@ -14,6 +14,13 @@ const reveal = {
 }
 const BASE = import.meta.env.BASE_URL
 
+// Glass cards get a soft light that follows the pointer (CSS vars read by .glass::before)
+function spot(e: PointerEvent<HTMLElement>) {
+  const r = e.currentTarget.getBoundingClientRect()
+  e.currentTarget.style.setProperty('--mx', `${e.clientX - r.left}px`)
+  e.currentTarget.style.setProperty('--my', `${e.clientY - r.top}px`)
+}
+
 function Heading({ kicker, title }: { kicker: string; title: string }) {
   return (
     <motion.header className="ex-head" {...reveal}>
@@ -27,7 +34,7 @@ function Stats() {
   return (
     <section className="ex-section ex-stats" aria-label="Results">
       {STATS.map((s, i) => (
-        <motion.div key={s.label} className="ex-stat" {...reveal} transition={{ ...reveal.transition, delay: i * 0.08 }}>
+        <motion.div key={s.label} className="ex-stat glass" onPointerMove={spot} style={{ animationDelay: `${i * -1.4}s` }} {...reveal} transition={{ ...reveal.transition, delay: i * 0.08 }}>
           <span className="ex-stat-value">{s.value}</span>
           <span className="ex-stat-label">{s.label}</span>
         </motion.div>
@@ -42,7 +49,7 @@ function Services() {
       <Heading kicker="Services" title="How I can help" />
       <div className="ex-grid ex-grid-services">
         {SERVICES.map((s, i) => (
-          <motion.article key={s.title} className="ex-card" {...reveal} transition={{ ...reveal.transition, delay: i * 0.06 }}>
+          <motion.article key={s.title} className="ex-card glass" onPointerMove={spot} {...reveal} transition={{ ...reveal.transition, delay: i * 0.06 }}>
             <span className="ex-card-no">{String(i + 1).padStart(2, '0')}</span>
             <h3 className="ex-card-title">{s.title}</h3>
             <p className="ex-card-body">{s.body}</p>
@@ -64,7 +71,7 @@ function Process() {
       <Heading kicker="Process" title="How I work" />
       <ol className="ex-steps">
         {STEPS.map((s, i) => (
-          <motion.li key={s.title} className="ex-step" {...reveal} transition={{ ...reveal.transition, delay: i * 0.08 }}>
+          <motion.li key={s.title} className="ex-step glass" onPointerMove={spot} {...reveal} transition={{ ...reveal.transition, delay: i * 0.08 }}>
             <span className="ex-step-no">{i + 1}</span>
             <h3 className="ex-step-title">{s.title}</h3>
             <p className="ex-step-body">{s.body}</p>
@@ -103,7 +110,7 @@ function Testimonials() {
       <Heading kicker="Testimonials" title="What clients say" />
       <div className="ex-grid ex-grid-quotes">
         {TESTIMONIALS.map((t) => (
-          <motion.blockquote key={t.name} className="ex-quote" {...reveal}>
+          <motion.blockquote key={t.name} className="ex-quote glass" onPointerMove={spot} {...reveal}>
             <p>“{t.quote}”</p>
             <footer>
               <strong>{t.name}</strong>
@@ -148,7 +155,7 @@ function Contact() {
     <section className="ex-section ex-contact" id="contact">
       <Heading kicker="Contact" title="Let's grow your brand" />
       <div className="ex-contact-grid">
-        <motion.div className="ex-contact-side" {...reveal}>
+        <motion.div className="ex-contact-side glass" onPointerMove={spot} {...reveal}>
           <p className="ex-contact-lead">
             Tell me about your business and what you want to grow. I usually reply within a day.
           </p>
@@ -171,7 +178,8 @@ function Contact() {
         </motion.div>
 
         <motion.form
-          className="ex-form"
+          className="ex-form glass"
+          onPointerMove={spot}
           name="contact"
           method="POST"
           data-netlify="true"
@@ -251,6 +259,12 @@ function Footer() {
 export default function Extras() {
   return (
     <div className="extras">
+      <div className="ex-orbs" aria-hidden="true">
+        <span />
+        <span />
+        <span />
+        <span />
+      </div>
       <Stats />
       <Services />
       <Process />

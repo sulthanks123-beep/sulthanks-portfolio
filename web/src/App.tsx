@@ -7,6 +7,7 @@ import Scene from './scene/Scene'
 import Resume from './ui/Resume'
 import Works from './ui/Works'
 import Extras from './ui/Extras'
+import FloatingNav from './ui/FloatingNav'
 import LoadingScreen from './ui/LoadingScreen'
 import { useStore } from './store'
 
@@ -175,6 +176,9 @@ export default function App() {
 
       {/* Film-grain overlay turned off: it showed as dark specks on the character's face */}
       {/* <NoiseOverlay /> */}
+
+      {/* Floating glass section menu (appears after the hero) */}
+      <FloatingNav />
 
       {/* 可滚动内容 */}
       <main className="content">
