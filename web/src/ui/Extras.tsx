@@ -125,27 +125,91 @@ function Testimonials() {
 
 // The form doesn't post anywhere: it opens WhatsApp with the visitor's details typed in,
 // addressed to CONTACT.whatsapp, and the visitor presses send there.
-function whatsappText(data: FormData) {
-  const v = (k: string) => String(data.get(k) || '').trim()
+interface Lead {
+  name: string
+  business: string
+  contact: string
+  needs: string[]
+  budget: string
+  message: string
+}
+
+function whatsappText(l: Lead) {
   const lines = [
-    `Hi Sulthan, I found you through your portfolio.`,
+    `Hi Sulthan, I'm ${l.name}${l.business ? ` from ${l.business}` : ''}. I found you through your portfolio.`,
     '',
-    `Name: ${v('name')}`,
-    `Contact: ${v('contact')}`,
-    v('business') ? `Business: ${v('business')}` : null,
-    v('budget') ? `Monthly ad budget: ${v('budget')}` : null,
-    '',
-    v('message'),
+    l.needs.length ? `I need help with: ${l.needs.join(', ')}` : null,
+    l.budget ? `Monthly ad budget: ${l.budget}` : null,
+    `Reach me at: ${l.contact}`,
+    l.message ? ['', l.message].join('\n') : null,
   ]
-  return lines.filter((l) => l !== null).join('\n')
+  return lines.filter((x) => x !== null).join('\n')
+}
+
+// Inline text field that sits inside the sentence and grows with what's typed
+function Blank({
+  value,
+  onChange,
+  placeholder,
+  label,
+  required,
+  type = 'text',
+  autoComplete,
+}: {
+  value: string
+  onChange: (v: string) => void
+  placeholder: string
+  label: string
+  required?: boolean
+  type?: string
+  autoComplete?: string
+}) {
+  return (
+    <span className="lead-blank" data-value={value || placeholder}>
+      <input
+        aria-label={label}
+        size={1}
+        type={type}
+        value={value}
+        placeholder={placeholder}
+        required={required}
+        autoComplete={autoComplete}
+        onChange={(e) => onChange(e.target.value)}
+      />
+    </span>
+  )
+}
+
+function Chip({ on, children, onClick }: { on: boolean; children: string; onClick: () => void }) {
+  return (
+    <button type="button" className={`lead-chip${on ? ' is-on' : ''}`} aria-pressed={on} onClick={onClick}>
+      {on && <Star className="lead-chip-star" />}
+      {children}
+    </button>
+  )
+}
+
+function WhatsAppIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" className="lead-wa">
+      <path
+        fill="currentColor"
+        d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.8 11.9 11.9 0 0 0 4.6 4c1.7.7 2.3.8 3.2.6a2.7 2.7 0 0 0 1.8-1.3 2.2 2.2 0 0 0 .1-1.3c0-.1-.2-.2-.5-.3z"
+      />
+    </svg>
+  )
 }
 
 function Contact() {
+  const [lead, setLead] = useState<Lead>({ name: '', business: '', contact: '', needs: [], budget: '', message: '' })
   const [sent, setSent] = useState(false)
+  const set = (k: keyof Lead) => (v: string) => setLead((l) => ({ ...l, [k]: v }))
+  const toggleNeed = (n: string) =>
+    setLead((l) => ({ ...l, needs: l.needs.includes(n) ? l.needs.filter((x) => x !== n) : [...l.needs, n] }))
 
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    const url = `${CONTACT.whatsapp}?text=${encodeURIComponent(whatsappText(new FormData(e.currentTarget)))}`
+    const url = `${CONTACT.whatsapp}?text=${encodeURIComponent(whatsappText(lead))}`
     // open straight from the click so browsers don't block it; fall back to same-tab
     const win = window.open(url, '_blank')
     if (win) win.opener = null
@@ -158,12 +222,24 @@ function Contact() {
       <Heading title="Start a project" />
       <div className="ex-contact-grid">
         <motion.div className="ex-contact-side glass" onPointerMove={spot} {...reveal}>
+          <span className="lead-status">
+            <span className="lead-dot" aria-hidden="true" />
+            Taking new projects
+          </span>
           <p className="ex-contact-lead">
-            Tell me about your business and what you want to grow. I usually reply within a day.
+            Fill in the message, pick what you need, and it lands straight in my WhatsApp. I usually reply within a day.
           </p>
-          <a className="ex-btn ex-btn-primary" href={CONTACT.whatsapp} target="_blank" rel="noopener noreferrer">
-            Chat on WhatsApp
-          </a>
+          <ol className="lead-next" aria-label="What happens next">
+            <li>
+              <span>1</span>You send the message on WhatsApp
+            </li>
+            <li>
+              <span>2</span>I reply within a day with a few questions
+            </li>
+            <li>
+              <span>3</span>We plan your first campaign together
+            </li>
+          </ol>
           <ul className="ex-contact-links">
             <li>
               <a href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a>
@@ -179,48 +255,60 @@ function Contact() {
           </ul>
         </motion.div>
 
-        <motion.form
-          className="ex-form glass"
-          onPointerMove={spot}
-          name="contact"
-          onSubmit={onSubmit}
-          {...reveal}
-        >
-          <label className="ex-field">
-            <span>Name</span>
-            <input name="name" required autoComplete="name" />
-          </label>
-          <label className="ex-field">
-            <span>Email or WhatsApp</span>
-            <input name="contact" required autoComplete="email" />
-          </label>
-          <label className="ex-field">
-            <span>Business</span>
-            <input name="business" placeholder="Brand name or website" />
-          </label>
-          <label className="ex-field">
-            <span>Monthly ad budget</span>
-            <select name="budget" defaultValue="">
-              <option value="" disabled>
-                Choose one
-              </option>
-              {CONTACT.budgets.map((b) => (
-                <option key={b}>{b}</option>
-              ))}
-            </select>
-          </label>
-          <label className="ex-field ex-field-wide">
-            <span>What do you need?</span>
-            <textarea name="message" rows={4} required />
-          </label>
-          <button className="ex-btn ex-btn-primary ex-field-wide" type="submit">
-            Send on WhatsApp
-          </button>
-          <p className={`ex-form-note ex-field-wide${sent ? ' is-ok' : ''}`}>
-            {sent
-              ? 'WhatsApp opened with your message. Press send there and I’ll reply soon.'
-              : 'This opens WhatsApp with your details filled in. Just press send.'}
+        <motion.form className="lead glass" name="contact" onSubmit={onSubmit} onPointerMove={spot} {...reveal}>
+          <p className="lead-line">
+            Hey Sulthan, I'm{' '}
+            <Blank value={lead.name} onChange={set('name')} placeholder="your name" label="Your name" required autoComplete="name" />{' '}
+            from{' '}
+            <Blank value={lead.business} onChange={set('business')} placeholder="brand or website" label="Business" autoComplete="organization" />.
           </p>
+
+          <div className="lead-group">
+            <span className="lead-q">I need help with</span>
+            <div className="lead-chips">
+              {CONTACT.needs.map((n) => (
+                <Chip key={n} on={lead.needs.includes(n)} onClick={() => toggleNeed(n)}>
+                  {n}
+                </Chip>
+              ))}
+            </div>
+          </div>
+
+          <div className="lead-group">
+            <span className="lead-q">My monthly ad budget is</span>
+            <div className="lead-chips">
+              {CONTACT.budgets.map((b) => (
+                <Chip key={b} on={lead.budget === b} onClick={() => set('budget')(lead.budget === b ? '' : b)}>
+                  {b}
+                </Chip>
+              ))}
+            </div>
+          </div>
+
+          <p className="lead-line">
+            Reach me at{' '}
+            <Blank value={lead.contact} onChange={set('contact')} placeholder="email or WhatsApp" label="Email or WhatsApp" required autoComplete="email" />
+          </p>
+
+          <label className="lead-note">
+            <span className="lead-q">Anything else?</span>
+            <textarea
+              rows={3}
+              value={lead.message}
+              placeholder="Goals, timeline, links… (optional)"
+              onChange={(e) => set('message')(e.target.value)}
+            />
+          </label>
+
+          <div className="lead-send">
+            <button className="lead-btn" type="submit">
+              <WhatsAppIcon />
+              Send on WhatsApp
+            </button>
+            <p className={`lead-hint${sent ? ' is-ok' : ''}`} role="status">
+              {sent ? 'WhatsApp opened with your message. Press send there and I’ll reply soon.' : 'Opens WhatsApp with your message ready to send.'}
+            </p>
+          </div>
         </motion.form>
       </div>
     </section>
