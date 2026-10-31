@@ -2292,3 +2292,60 @@ canvas {
     -webkit-text-stroke-width: 0.8px;
   }
 }
+
+/* ---------- Phone polish ---------- */
+@media (max-width: 640px) {
+  /* works: show the cover art large instead of a small thumbnail */
+  .wk-card-cover {
+    align-self: stretch;
+    width: 100%;
+    margin: 4px 0 6px;
+    aspect-ratio: 16 / 9;
+    border-radius: 18px;
+    box-shadow: 0 24px 50px -24px rgba(118, 68, 255, 0.6);
+  }
+
+  /* tilted bands: steeper angles so the crossing reads on a narrow screen */
+  .bn-cross {
+    height: 260px;
+  }
+  .bn-band-a {
+    rotate: -9deg;
+  }
+  .bn-band-b {
+    rotate: 8deg;
+  }
+  .bn-item {
+    font-size: 26px;
+  }
+
+  .bn-scroll-line {
+    font-size: 58px;
+  }
+}
+
+/* Touch screens have no cursor to light the glass, so a soft light drifts across each card instead */
+@media (hover: none) {
+  .glass::before {
+    opacity: 1;
+    background: radial-gradient(60% 50% at 50% 50%, rgba(150, 110, 255, 0.22), transparent 70%);
+    background-size: 220% 220%;
+    animation: glassDrift 9s ease-in-out infinite alternate;
+  }
+  .ex-card:nth-child(2n)::before,
+  .ex-step:nth-child(2n)::before {
+    animation-delay: -4.5s;
+  }
+}
+
+@keyframes glassDrift {
+  0% { background-position: 0% 0%; }
+  50% { background-position: 100% 40%; }
+  100% { background-position: 30% 100%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .glass::before {
+    animation: none;
+  }
+}
