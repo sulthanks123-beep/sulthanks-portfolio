@@ -2292,3 +2292,218 @@ canvas {
     -webkit-text-stroke-width: 0.8px;
   }
 }
+
+/* ---------- Works: premium restyle (colours/type everywhere, panels on desktop) ---------- */
+.works {
+  --wk-accent: #b59cff;
+}
+
+.wk-gallery-title {
+  font-weight: 800;
+  font-size: clamp(28px, 3.6vw, 52px);
+  letter-spacing: -0.03em;
+}
+
+.wk-card-no {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  font-size: clamp(12px, 1.2vw, 14px);
+  color: var(--wk-accent);
+}
+
+.wk-card-title {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(30px, 3.6vw, 52px);
+  line-height: 0.98;
+  letter-spacing: -0.03em;
+  color: #fff;
+}
+
+.wk-card-tagline {
+  margin-top: 0.9em;
+  letter-spacing: 0;
+  font-size: clamp(13px, 1.2vw, 15px);
+}
+
+.wk-line-name {
+  font-weight: 500;
+  font-size: clamp(14px, 1.4vw, 17px);
+}
+
+.wk-line-btn:hover .wk-line-name,
+.wk-line-btn:focus-visible .wk-line-name {
+  color: #fff;
+}
+
+.wk-line-num {
+  color: var(--wk-accent);
+  letter-spacing: 0;
+}
+
+.wk-sub-head,
+.wk-foot-label {
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: 13px;
+}
+
+.wk-foot-val.accent {
+  color: var(--wk-accent);
+  letter-spacing: 0;
+}
+
+.wk-progress {
+  height: 3px;
+  background: rgba(181, 156, 255, 0.18);
+}
+
+.wk-progress-fill {
+  background: linear-gradient(90deg, #5b2fe0, #7644ff, #c9b8ff);
+  box-shadow: 0 0 12px rgba(118, 68, 255, 0.9);
+}
+
+.wk-md a {
+  color: var(--wk-accent);
+  border-bottom-color: rgba(181, 156, 255, 0.45);
+}
+.wk-md a:hover {
+  border-bottom-color: var(--wk-accent);
+}
+.wk-md blockquote {
+  border-left-color: rgba(181, 156, 255, 0.6);
+}
+
+/* detail sheet */
+.wk-detail {
+  background: linear-gradient(160deg, rgba(28, 18, 52, 0.97), rgba(8, 6, 16, 0.98) 60%);
+  border-color: rgba(181, 156, 255, 0.22);
+  box-shadow: 0 40px 120px -30px rgba(118, 68, 255, 0.55);
+}
+.wk-detail-banner.is-ph {
+  background: radial-gradient(120% 120% at 70% 110%, rgba(118, 68, 255, 0.55), rgba(10, 6, 20, 0.98) 65%);
+}
+.wk-detail-ph-text,
+.wk-detail-title {
+  font-family: var(--font-display);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: #fff;
+}
+.wk-badge {
+  border-color: rgba(181, 156, 255, 0.35);
+  background: rgba(118, 68, 255, 0.14);
+  color: #e6dcff;
+}
+.wk-detail-link {
+  border-color: rgba(181, 156, 255, 0.5);
+  color: var(--wk-accent);
+}
+.wk-detail-link:hover {
+  background: rgba(118, 68, 255, 0.16);
+}
+
+/* desktop & tablet: each section becomes a floating glass panel */
+@media (min-width: 641px) {
+  .wk-track {
+    gap: 22px;
+  }
+
+  .wk-card {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    height: calc(100% - clamp(96px, 16vh, 150px) - clamp(70px, 11vh, 110px));
+    margin: clamp(96px, 16vh, 150px) 0 clamp(70px, 11vh, 110px);
+    padding: clamp(40px, 6vh, 64px) clamp(36px, 4vw, 60px);
+    gap: clamp(22px, 4vh, 40px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 30px;
+    background: linear-gradient(150deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.015) 45%, rgba(118, 68, 255, 0.1));
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.18),
+      0 40px 80px -40px rgba(0, 0, 0, 0.9);
+  }
+
+  .wk-card:last-child {
+    border-right: 1px solid rgba(255, 255, 255, 0.12);
+  }
+
+  /* soft purple glow in the panel corner */
+  .wk-card::before {
+    content: '';
+    position: absolute;
+    right: -20%;
+    bottom: -30%;
+    z-index: -1;
+    width: 70%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(118, 68, 255, 0.35), transparent 65%);
+    pointer-events: none;
+  }
+
+  .wk-card-cover {
+    width: clamp(220px, 26vw, 330px);
+    margin-right: 0;
+    border-radius: 22px;
+    border-color: rgba(181, 156, 255, 0.3);
+    box-shadow: 0 30px 60px -24px rgba(118, 68, 255, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    rotate: -3deg;
+    transition: rotate 0.5s cubic-bezier(0.22, 1, 0.36, 1), scale 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .wk-card:hover .wk-card-cover {
+    rotate: 0deg;
+    scale: 1.04;
+  }
+
+  /* project rows light up as a glass pill on hover */
+  .wk-line {
+    border-bottom-color: rgba(255, 255, 255, 0.07);
+  }
+
+  .wk-line-btn {
+    padding-inline: 14px;
+    margin-inline: -14px;
+    width: calc(100% + 28px);
+    border-radius: 14px;
+    transition: background 0.25s ease, padding-left 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .wk-line-btn:hover,
+  .wk-line-btn:focus-visible {
+    padding-left: 22px;
+    background: rgba(118, 68, 255, 0.16);
+    box-shadow: inset 0 0 0 1px rgba(181, 156, 255, 0.28);
+  }
+}
+
+/* desktop: cover sits top-right beside the title so long lists fit on short screens */
+@media (min-width: 641px) {
+  .wk-card-head {
+    max-width: 58%;
+  }
+
+  .wk-card-cover {
+    position: absolute;
+    top: clamp(36px, 6vh, 60px);
+    right: clamp(32px, 3.6vw, 56px);
+    width: clamp(180px, 20vw, 290px);
+  }
+
+  .wk-card-body {
+    margin-top: auto;
+  }
+}
+
+@media (min-width: 641px) {
+  .wk-card-title {
+    font-size: clamp(28px, 3vw, 46px);
+  }
+
+  .wk-track {
+    padding-right: clamp(24px, 4vw, 64px);
+  }
+}
