@@ -173,8 +173,6 @@ function Man2({
     parallax: 4,
     parallaxEase: 0.1,
     mobilePullback: 1.2,
-    mobileTimelinePullback: 2.1, // phones, fallback: extra pull-back in the résumé if the hero distance is unknown
-    mobileMinDist: 1.0, // phones: in the résumé never get closer than this × the hero shot's distance
     mobileTimelineShift: 0.12,
   }
 
@@ -337,9 +335,6 @@ function Man2({
       (window.matchMedia?.('(pointer: coarse)').matches === true ||
         window.innerWidth <= 640)
   )
-
-  // phones: camera distance in the hero shot, used as the closest allowed distance in the résumé
-  const heroDist = useRef(0)
 
   // 履历锚点 DOM 元素（决定当前播放到第几段）
   const anchorEls = useRef<any>(null)
@@ -508,23 +503,14 @@ function Man2({
         .sub(focusRef.current)
         .applyQuaternion(paraQuat.current)
       // 移动端沿「焦点→相机」方向整体拉远：焦点屏幕位置不变，主体更小、留白更多
-      // 时间轴阶段权重：从 Hero 渐入(s: -0.8→0.3)、进入作品区随 smoothOff 渐出 → 无跳变
-      const tlWeight = isMobile.current ? THREE.MathUtils.smoothstep(s, -0.8, 0.3) * (1 - smoothOff) : 0
-      if (isMobile.current) {
-        const d = tmpVec.current.length() * cam.mobilePullback
-        if (tlWeight === 0 && s < -0.8) heroDist.current = d // remember the hero framing
-        const target =
-          heroDist.current > 0
-            ? Math.max(d, heroDist.current * cam.mobileMinDist)
-            : (d / cam.mobilePullback) * cam.mobileTimelinePullback
-        tmpVec.current.setLength(THREE.MathUtils.lerp(d, target, tlWeight))
-      }
+      if (isMobile.current) tmpVec.current.multiplyScalar(cam.mobilePullback)
       tmpVec.current.add(focusRef.current)
       camera.position.copy(tmpVec.current)
       camera.quaternion.multiplyQuaternions(paraQuat.current, camQuat.current)
       // 移动端「时间轴阶段」把镜头整体左移，让主体从满宽文字后错开。
       // 权重：从 Hero 渐入(s: -0.8→0.3)、进入作品区随 smoothOff 渐出 → 无跳变。
       if (isMobile.current && cam.mobileTimelineShift !== 0) {
+        const tlWeight = THREE.MathUtils.smoothstep(s, -0.8, 0.3) * (1 - smoothOff)
         if (tlWeight > 0) {
           // translateX 沿局部 +X（屏幕右）；取负 → 相机左移
           const dist = camera.position.distanceTo(focusRef.current)
@@ -615,13 +601,6 @@ function Post2({
   }
 
   const dofRef = useRef<any>(null)
-  // phones keep the camera further back, so a lighter blur keeps the character readable
-  const blurScale = useRef(
-    typeof window !== 'undefined' &&
-      (window.matchMedia?.('(pointer: coarse)').matches === true || window.innerWidth <= 640)
-      ? 0.3
-      : 1
-  )
   useFrame(() => {
     const e = dofRef.current
     if (!e) return
@@ -634,11 +613,11 @@ function Post2({
     const w = Math.max(wStart, wEnd)
     if (dofBokehRef && dofBokehRef.current >= 0) {
       // glb 自带逐锚点景深参数（intro3d 导出）：直接采用，忠实还原 intro3d 的虚化强度/清晰范围（bokeh=0 即该点关景深）。
-      e.bokehScale = dofBokehRef.current * blurScale.current
+      e.bokehScale = dofBokehRef.current
       if (e.cocMaterial) e.cocMaterial.focusRange = Math.max(1e-4, dofRangeRef ? dofRangeRef.current : post.focusRange)
     } else {
       // 老 glb（无逐锚点参数）：沿用原全局帧混合档位。
-      e.bokehScale = THREE.MathUtils.lerp(post.focusBokeh, post.startBokeh, w) * blurScale.current
+      e.bokehScale = THREE.MathUtils.lerp(post.focusBokeh, post.startBokeh, w)
       if (e.cocMaterial) e.cocMaterial.focusRange = THREE.MathUtils.lerp(post.focusRange, post.startRange, w)
     }
   })
