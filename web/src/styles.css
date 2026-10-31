@@ -1,9 +1,11 @@
 :root {
+  --font-display: 'Syne', 'Manrope Variable', system-ui, sans-serif;
+  --font-body: 'Manrope Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --ink: #f4f1ea;
   --muted: rgba(244, 241, 234, 0.6);
   --panel: rgba(12, 16, 24, 0.72);
   --line: rgba(244, 241, 234, 0.14);
-  font-family: 'Helvetica Neue', 'Chiron GoRound TC', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  font-family: var(--font-body);
 }
 
 * {
@@ -184,7 +186,7 @@ canvas {
   inset: 0;
   z-index: 12;
   pointer-events: none;
-  font-family: 'Helvetica Neue', 'Chiron GoRound TC', 'PingFang SC', system-ui, sans-serif;
+  font-family: var(--font-body);
 }
 
 /* 发丝内框 */
@@ -277,22 +279,22 @@ canvas {
 }
 
 .about-title {
-  font-family: 'Mansalva', cursive;
-  font-weight: 400;
-  font-size: clamp(30px, 7.2vw, 80px);
-  line-height: 1;
-  letter-spacing: 0.01em;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(34px, 7.6vw, 96px);
+  line-height: 0.95;
+  letter-spacing: -0.03em;
   color: var(--ink);
   margin-bottom: 0.3em;
 }
 
 .about-body {
   margin: 0.5em auto 0;
-  max-width: min(660px, 88vw);
-  font-family: 'Cormorant Upright', 'Chiron GoRound TC', 'PingFang SC', 'Microsoft YaHei', serif;
+  max-width: min(620px, 88vw);
+  font-family: var(--font-body);
   font-weight: 500;
-  font-size: clamp(8px, 1.05vw, 16px);
-  line-height: 1.2;
+  font-size: clamp(14px, 1.15vw, 17px);
+  line-height: 1.6;
   color: var(--ink);
 }
 
@@ -312,7 +314,7 @@ canvas {
 
 /* 中文正文：拉丁衬线字体不含汉字，切到系统中文字体并放大行距 */
 .about[lang='zh'] .about-body {
-  font-family: 'Chiron GoRound TC', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  font-family: var(--font-body);
   font-weight: 400;
   font-size: clamp(8.8px, 0.92vw, 12.8px);
   line-height: 1.7;
@@ -327,7 +329,7 @@ canvas {
   z-index: 110;
   min-width: 52px;
   padding: 7px 16px;
-  font-family: 'Helvetica Neue', 'Chiron GoRound TC', 'PingFang SC', system-ui, sans-serif;
+  font-family: var(--font-body);
   font-size: 12px;
   font-weight: 500;
   letter-spacing: 0.08em;
@@ -357,8 +359,8 @@ canvas {
   width: min(480px, 90vw);
   margin: 0 6vw 0 auto;
   text-align: left;
-  font-family: 'Cormorant Upright', 'Chiron GoRound TC', 'PingFang SC', serif;
-  font-weight: 600;
+  font-family: var(--font-display);
+  font-weight: 700;
   font-size: clamp(28px, 5vw, 56px);
   letter-spacing: 0.02em;
   color: var(--ink);
@@ -407,7 +409,7 @@ canvas {
 }
 
 .tl-period {
-  font-family: 'Helvetica Neue', system-ui, sans-serif;
+  font-family: var(--font-body);
   font-size: 13px;
   letter-spacing: 0.18em;
   color: rgba(244, 241, 234, 0.72);
@@ -917,9 +919,9 @@ canvas {
   background: radial-gradient(120% 120% at 30% 25%, rgba(48, 55, 60, 0.5), rgba(29, 33, 36, 0.98));
 }
 .wk-card-cover-no {
-  font-family: 'Cormorant Upright', 'Chiron GoRound TC', 'PingFang SC', serif;
+  font-family: var(--font-display);
   font-size: clamp(40px, 7vw, 88px);
-  font-weight: 600;
+  font-weight: 700;
   line-height: 1;
   color: rgba(244, 241, 234, 0.16);
 }
@@ -929,7 +931,7 @@ canvas {
 }
 .wk-card-no {
   display: block;
-  font-family: 'Helvetica Neue', system-ui, sans-serif;
+  font-family: var(--font-body);
   font-size: clamp(11px, 1.2vw, 13px);
   letter-spacing: 0.3em;
   color: rgba(244, 241, 234, 0.4);
@@ -964,8 +966,8 @@ canvas {
   top: clamp(16px, 4vh, 40px);
   left: clamp(24px, 6vw, 80px);
   z-index: 2;
-  font-family: 'Cormorant Upright', 'Chiron GoRound TC', 'PingFang SC', serif;
-  font-weight: 600;
+  font-family: var(--font-display);
+  font-weight: 700;
   font-size: clamp(22px, 3vw, 38px);
   letter-spacing: 0.02em;
   color: var(--ink);
@@ -1217,9 +1219,9 @@ canvas {
   background: radial-gradient(120% 120% at 30% 20%, rgba(48, 55, 60, 0.5), rgba(29, 33, 36, 0.98));
 }
 .wk-detail-ph-text {
-  font-family: 'Cormorant Upright', 'Chiron GoRound TC', 'PingFang SC', serif;
+  font-family: var(--font-display);
   font-size: clamp(28px, 5vw, 72px);
-  font-weight: 600;
+  font-weight: 700;
   line-height: 1.1;
   text-align: center;
   color: rgba(244, 241, 234, 0.16);
@@ -1664,15 +1666,12 @@ canvas {
 }
 
 .ex-title {
-  font-family: 'Cormorant Upright', 'Chiron GoRound TC', serif;
-  font-weight: 600;
-  font-size: clamp(36px, 5.6vw, 64px);
-  line-height: 1.02;
-  letter-spacing: 0.01em;
-  background: linear-gradient(180deg, #fff 30%, #c9b8ff);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(42px, 6.6vw, 96px);
+  line-height: 0.92;
+  letter-spacing: -0.035em;
+  color: #fff;
 }
 
 .ex-grid {
@@ -1693,6 +1692,7 @@ canvas {
 }
 
 .ex-stat-value {
+  font-family: var(--font-display);
   display: block;
   font-size: clamp(38px, 4.8vw, 60px);
   font-weight: 700;
@@ -1726,23 +1726,19 @@ canvas {
   translate: 0 -6px;
 }
 
-.ex-card-no {
-  display: inline-grid;
-  place-items: center;
-  width: 40px;
-  height: 40px;
-  border-radius: 12px;
-  background: linear-gradient(140deg, var(--accent), #9d7bff);
-  box-shadow: 0 10px 24px -8px rgba(118, 68, 255, 0.8);
-  font-size: 13px;
-  font-weight: 700;
-  color: #fff;
+.ex-card-icon {
+  display: block;
+  width: 44px;
+  height: 44px;
+  filter: drop-shadow(0 6px 18px rgba(118, 68, 255, 0.7));
 }
 
 .ex-card-title {
   margin-top: 22px;
-  font-size: 20px;
-  font-weight: 600;
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
 }
 
 .ex-card-body {
@@ -1792,6 +1788,7 @@ canvas {
 }
 
 .ex-step-no {
+  font-family: var(--font-display);
   display: block;
   font-size: 52px;
   font-weight: 700;
@@ -1805,8 +1802,10 @@ canvas {
 
 .ex-step-title {
   margin-top: 18px;
-  font-size: 20px;
-  font-weight: 600;
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
 }
 
 .ex-step-body {
@@ -2170,5 +2169,125 @@ canvas {
   .ex-orbs span,
   .ex-stat {
     animation: none;
+  }
+}
+
+/* ---------- Banners (Banners.tsx) ---------- */
+.bn-cross {
+  position: relative;
+  height: clamp(200px, 26vw, 320px);
+  margin: calc(-1 * clamp(72px, 12vh, 140px)) 0 clamp(64px, 10vh, 120px);
+}
+
+.bn-band {
+  position: absolute;
+  left: -10vw;
+  width: 120vw;
+  overflow: hidden;
+  padding: clamp(12px, 1.6vw, 20px) 0;
+}
+
+.bn-band-a {
+  top: 50%;
+  translate: 0 -50%;
+  rotate: -4deg;
+  background: linear-gradient(90deg, #5b2fe0, #7644ff 45%, #9b74ff);
+  color: #fff;
+  box-shadow: 0 24px 60px -18px rgba(118, 68, 255, 0.75), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  z-index: 2;
+}
+
+.bn-band-b {
+  top: 50%;
+  translate: 0 -50%;
+  rotate: 3deg;
+  background: #000;
+  border-block: 1px solid rgba(181, 156, 255, 0.35);
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(214, 200, 255, 0.85);
+  z-index: 1;
+}
+
+.bn-track {
+  display: flex;
+  width: max-content;
+  will-change: transform;
+}
+
+.bn-row {
+  display: flex;
+  flex: none;
+}
+
+.bn-item {
+  display: inline-flex;
+  align-items: center;
+  gap: clamp(18px, 2.4vw, 34px);
+  padding-right: clamp(18px, 2.4vw, 34px);
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(22px, 3.4vw, 46px);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+}
+
+.bn-star {
+  width: 0.8em;
+  height: 0.8em;
+  flex: none;
+}
+
+.bn-band-a .bn-star {
+  filter: brightness(1.6) drop-shadow(0 0 8px rgba(255, 255, 255, 0.6));
+}
+
+.bn-scroll {
+  overflow: hidden;
+  padding: clamp(24px, 4vh, 48px) 0;
+  margin-bottom: clamp(80px, 12vh, 140px);
+}
+
+.bn-scroll-line {
+  display: flex;
+  width: max-content;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(64px, 13vw, 200px);
+  line-height: 0.95;
+  letter-spacing: -0.045em;
+  white-space: nowrap;
+  will-change: transform;
+}
+
+.bn-scroll-line span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25em;
+  padding-right: 0.25em;
+}
+
+.bn-scroll-line.is-solid {
+  color: #fff;
+}
+
+.bn-scroll-line.is-outline {
+  color: transparent;
+  -webkit-text-stroke: 1.5px #9b74ff;
+}
+
+.bn-scroll-star {
+  width: 0.55em;
+  height: 0.55em;
+  flex: none;
+}
+
+@media (max-width: 560px) {
+  .bn-cross {
+    height: 190px;
+  }
+
+  .bn-band-b {
+    -webkit-text-stroke-width: 0.8px;
   }
 }

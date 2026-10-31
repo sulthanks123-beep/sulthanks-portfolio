@@ -1,6 +1,7 @@
 import { useState, type FormEvent, type PointerEvent } from 'react'
 import { motion } from 'framer-motion'
 import { STATS, SERVICES, STEPS, CREATIVES, TESTIMONIALS, CONTACT } from '../data/extras'
+import { Star, TiltedBands, ScrollBanner } from './Banners'
 
 // Sections below Works: numbers, services, process, creatives, testimonials, contact.
 // Content lives in data/extras.ts.
@@ -21,10 +22,9 @@ function spot(e: PointerEvent<HTMLElement>) {
   e.currentTarget.style.setProperty('--my', `${e.clientY - r.top}px`)
 }
 
-function Heading({ kicker, title }: { kicker: string; title: string }) {
+function Heading({ title }: { title: string }) {
   return (
     <motion.header className="ex-head" {...reveal}>
-      <span className="ex-kicker">{kicker}</span>
       <h2 className="ex-title">{title}</h2>
     </motion.header>
   )
@@ -46,11 +46,11 @@ function Stats() {
 function Services() {
   return (
     <section className="ex-section" id="services">
-      <Heading kicker="Services" title="How I can help" />
+      <Heading title="How I can help" />
       <div className="ex-grid ex-grid-services">
         {SERVICES.map((s, i) => (
           <motion.article key={s.title} className="ex-card glass" onPointerMove={spot} {...reveal} transition={{ ...reveal.transition, delay: i * 0.06 }}>
-            <span className="ex-card-no">{String(i + 1).padStart(2, '0')}</span>
+            <Star className="ex-card-icon" />
             <h3 className="ex-card-title">{s.title}</h3>
             <p className="ex-card-body">{s.body}</p>
             <ul className="ex-card-points">
@@ -68,7 +68,7 @@ function Services() {
 function Process() {
   return (
     <section className="ex-section" id="process">
-      <Heading kicker="Process" title="How I work" />
+      <Heading title="How I work" />
       <ol className="ex-steps">
         {STEPS.map((s, i) => (
           <motion.li key={s.title} className="ex-step glass" onPointerMove={spot} {...reveal} transition={{ ...reveal.transition, delay: i * 0.08 }}>
@@ -86,7 +86,7 @@ function Creatives() {
   if (CREATIVES.length === 0) return null
   return (
     <section className="ex-section" id="creatives">
-      <Heading kicker="Creatives" title="Ads I've made" />
+      <Heading title="Ads I've made" />
       <div className={`ex-grid ex-grid-creatives${CREATIVES.length === 1 ? ' is-single' : ''}`}>
         {CREATIVES.map((c) => (
           <motion.figure key={c.src} className="ex-creative" {...reveal}>
@@ -107,7 +107,7 @@ function Testimonials() {
   if (TESTIMONIALS.length === 0) return null
   return (
     <section className="ex-section" id="testimonials">
-      <Heading kicker="Testimonials" title="What clients say" />
+      <Heading title="What clients say" />
       <div className="ex-grid ex-grid-quotes">
         {TESTIMONIALS.map((t) => (
           <motion.blockquote key={t.name} className="ex-quote glass" onPointerMove={spot} {...reveal}>
@@ -155,7 +155,7 @@ function Contact() {
 
   return (
     <section className="ex-section ex-contact" id="contact">
-      <Heading kicker="Contact" title="Let's grow your brand" />
+      <Heading title="Start a project" />
       <div className="ex-contact-grid">
         <motion.div className="ex-contact-side glass" onPointerMove={spot} {...reveal}>
           <p className="ex-contact-lead">
@@ -247,6 +247,7 @@ function Footer() {
 export default function Extras() {
   return (
     <div className="extras">
+      <TiltedBands />
       <div className="ex-orbs" aria-hidden="true">
         <span />
         <span />
@@ -258,6 +259,7 @@ export default function Extras() {
       <Process />
       <Creatives />
       <Testimonials />
+      <ScrollBanner text="Let's grow your brand" />
       <Contact />
       <Footer />
     </div>
