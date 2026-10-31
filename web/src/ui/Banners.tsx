@@ -40,7 +40,7 @@ function Track({ items, speed, className }: { items: string[]; speed: number; cl
   const base = useMotionValue(0)
   const { scrollY } = useScroll()
   const velocity = useSpring(useVelocity(scrollY), { damping: 50, stiffness: 400 })
-  const boost = useTransform(velocity, [-2000, 0, 2000], [4, 0, 4], { clamp: false })
+  const boost = useTransform(velocity, [-2000, 0, 2000], [2.5, 0, 2.5], { clamp: false })
   const x = useTransform(base, (v) => `${wrap(-50, 0, v)}%`)
 
   useAnimationFrame((_, delta) => {
@@ -76,8 +76,8 @@ const RESULTS = ['₹6.5M in sales', '35.9M impressions', '14.4% search CTR', '2
 export function TiltedBands() {
   return (
     <section className="bn-cross" aria-label="Services and results">
-      <Track items={RESULTS} speed={2.2} className="bn-band-b" />
-      <Track items={SERVICES} speed={-2.8} className="bn-band-a" />
+      <Track items={RESULTS} speed={1.4} className="bn-band-b" />
+      <Track items={SERVICES} speed={-1.8} className="bn-band-a" />
     </section>
   )
 }

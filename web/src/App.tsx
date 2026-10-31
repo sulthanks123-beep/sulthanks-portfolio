@@ -39,7 +39,7 @@ function Hero({ lang, cueOpacity }: { lang: Lang; cueOpacity: MotionValue<number
   // 触发起点提前：about 顶部位于视口 60% 处即开始（offset[0] 进度 0），到达顶部为进度 1
   const { scrollYProgress } = useScroll({
     target: aboutRef,
-    offset: ['start 0.6', 'start start'],
+    offset: ['start 0.5', 'start start'] // fade starts once the block's top passes mid-screen,
   })
   // 透明度在 about 顶部升到约 30vh 时归 0：起点 60%→进度 p 时顶部在 0.6×(1−p)，
   // 令 =0.3 解得 p=0.5，故 opacity 区间 [0, 0.5]
@@ -48,7 +48,7 @@ function Hero({ lang, cueOpacity }: { lang: Lang; cueOpacity: MotionValue<number
   // 视差：标题上升更快、字距随滚动拉开；正文上升慢一点
   const titleY = useTransform(scrollYProgress, [0, 1], [0, -96])
   const bodyY = useTransform(scrollYProgress, [0, 1], [0, -52])
-  const titleSpacing = useTransform(scrollYProgress, [0, 1], ['0.01em', '0.42em'])
+  const titleSpacing = useTransform(scrollYProgress, [0, 1], ['0em', '0.06em']) // small: script letters must stay joined
   return (
     <section className="hero">
       <motion.div
