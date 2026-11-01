@@ -1,4 +1,4 @@
-import { Suspense, useRef, useState } from 'react'
+import { Suspense, useEffect, useRef, useState } from 'react'
 import { Canvas } from '@react-three/fiber'
 import { motion, useScroll, useTransform, type MotionValue } from 'framer-motion'
 import * as THREE from 'three'
@@ -8,6 +8,9 @@ import Resume from './ui/Resume'
 import Works from './ui/Works'
 import Extras from './ui/Extras'
 import FloatingNav from './ui/FloatingNav'
+import CustomCursor from './ui/CustomCursor'
+import { DubaiClock, ScrambleText, SpinBadge } from './ui/Flair'
+import { startSmoothScroll } from './ui/smoothScroll'
 import LoadingScreen from './ui/LoadingScreen'
 import { useStore } from './store'
 
@@ -69,6 +72,7 @@ function Hero({ lang, cueOpacity }: { lang: Lang; cueOpacity: MotionValue<number
           ))}
         </div>
       </motion.div>
+      <SpinBadge />
       <motion.div className="scroll-cue" style={{ opacity: cueOpacity }} aria-hidden="true">
         <span className="scroll-cue-label">{lang === 'en' ? 'SCROLL' : '向下滚动'}</span>
         <span className="scroll-cue-track">
@@ -89,6 +93,7 @@ function LangToggle({ lang, onToggle }: { lang: Lang; onToggle: () => void }) {
 
 export default function App() {
   const [lang, setLang] = useState<Lang>('en')
+  useEffect(() => startSmoothScroll(), [])
   const { scrollY } = useScroll()
   // 作品区蒙层：以作品区顶部从视口底进入到视口中部的进度，驱动 3D 渐暗 + 模糊
   const worksRef = useRef(null)
@@ -166,16 +171,21 @@ export default function App() {
         <span className="hero-mark bl">+</span>
         <span className="hero-mark br">+</span>
         <div className="hero-meta hm-tl">
-          <span className="hm-name">Sulthan K S</span>
+          <ScrambleText className="hm-name" text="Sulthan K S" />
           <span>Performance Marketer</span>
         </div>
-        <div className="hero-meta hm-tr">Portfolio — 2026</div>
+        <div className="hero-meta hm-tr">
+          <DubaiClock />
+        </div>
         <div className="hero-meta hm-bl">Content · Ads · Strategy</div>
         <div className="hero-meta hm-right">Based in Dubai, UAE</div>
       </motion.div>
 
       {/* Film-grain overlay turned off: it showed as dark specks on the character's face */}
       {/* <NoiseOverlay /> */}
+
+      {/* Desktop cursor + magnetic buttons */}
+      <CustomCursor />
 
       {/* Floating glass section menu (appears after the hero) */}
       <FloatingNav />

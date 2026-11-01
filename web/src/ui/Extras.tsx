@@ -2,6 +2,7 @@ import { useState, type FormEvent, type PointerEvent } from 'react'
 import { motion } from 'framer-motion'
 import { STATS, SERVICES, STEPS, CREATIVES, TESTIMONIALS, CONTACT } from '../data/extras'
 import { Star, TiltedBands, ScrollBanner } from './Banners'
+import { RevealText } from './Flair'
 
 // Sections below Works: numbers, services, process, creatives, testimonials, contact.
 // Content lives in data/extras.ts.
@@ -24,8 +25,8 @@ function spot(e: PointerEvent<HTMLElement>) {
 
 function Heading({ title }: { title: string }) {
   return (
-    <motion.header className="ex-head" {...reveal}>
-      <h2 className="ex-title">{title}</h2>
+    <motion.header className="ex-head">
+      <RevealText className="ex-title" text={title} />
     </motion.header>
   )
 }
@@ -301,7 +302,7 @@ function Contact() {
           </label>
 
           <div className="lead-send">
-            <button className="lead-btn" type="submit">
+            <button className="lead-btn" type="submit" data-magnetic>
               <WhatsAppIcon />
               Send on WhatsApp
             </button>

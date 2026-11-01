@@ -4,6 +4,7 @@ import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import rehypeRaw from 'rehype-raw'
 import { WORKS, SECTION_COVERS, type WorkListItem, type WorkSection, type WorksLang } from '../data/works'
+import { pauseSmoothScroll } from './smoothScroll'
 import { getWorkDoc } from '../data/workDocs'
 
 const EASE = [0.22, 1, 0.36, 1]
@@ -144,6 +145,7 @@ function WorkDetail({
       />
       <motion.div
         className="wk-detail"
+        data-lenis-prevent
         initial={{ opacity: 0, scale: 0.985, y: 8 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.99, y: 6 }}
@@ -256,9 +258,11 @@ export default function Works({ lang, innerRef }: { lang: 'en' | 'zh'; innerRef:
     window.addEventListener('keydown', onKey)
     const prev = document.body.style.overflow
     document.body.style.overflow = 'hidden'
+    pauseSmoothScroll(true)
     return () => {
       window.removeEventListener('keydown', onKey)
       document.body.style.overflow = prev
+      pauseSmoothScroll(false)
     }
   }, [active])
 

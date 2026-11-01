@@ -15,7 +15,7 @@
 }
 
 html {
-  scroll-behavior: smooth;
+  scroll-behavior: auto; /* Lenis handles smooth scrolling */
   /* 禁用触底/触顶橡皮筋回弹：必须落在根滚动元素 html 上才在各浏览器可靠生效 */
   overscroll-behavior: none;
 }
@@ -2787,4 +2787,298 @@ canvas {
   font-weight: 700;
   font-size: 13px;
   color: #e6dcff;
+}
+
+/* ---------- Custom cursor (CustomCursor.tsx, desktop only) ---------- */
+html.has-cursor,
+html.has-cursor * {
+  cursor: none !important;
+}
+html.has-cursor input,
+html.has-cursor textarea,
+html.has-cursor select {
+  cursor: text !important;
+}
+
+.cur-dot,
+.cur-ring {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 10000;
+  pointer-events: none;
+  border-radius: 50%;
+  will-change: transform;
+}
+
+.cur-dot {
+  width: 8px;
+  height: 8px;
+  margin: -4px 0 0 -4px;
+  background: #c9b8ff;
+  box-shadow: 0 0 12px 2px rgba(118, 68, 255, 0.9);
+  transition: opacity 0.2s ease, scale 0.25s ease;
+}
+
+.cur-ring {
+  width: 38px;
+  height: 38px;
+  margin: -19px 0 0 -19px;
+  display: grid;
+  place-items: center;
+  border: 1.5px solid rgba(181, 156, 255, 0.7);
+  transition:
+    width 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    height 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    margin 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    background 0.3s ease,
+    border-color 0.3s ease,
+    opacity 0.2s ease;
+}
+
+.cur-label {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 12px;
+  color: #fff;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.cur-ring.is-link {
+  width: 58px;
+  height: 58px;
+  margin: -29px 0 0 -29px;
+  background: rgba(118, 68, 255, 0.16);
+  border-color: rgba(201, 184, 255, 0.9);
+}
+
+.cur-ring.is-view {
+  width: 76px;
+  height: 76px;
+  margin: -38px 0 0 -38px;
+  background: linear-gradient(135deg, #8a5cff, #5b2fe0);
+  border-color: transparent;
+  box-shadow: 0 10px 30px -6px rgba(118, 68, 255, 0.9);
+}
+.cur-ring.is-view .cur-label {
+  opacity: 1;
+}
+.cur-dot.is-view {
+  scale: 0;
+}
+
+.cur-ring.is-text,
+.cur-dot.is-text,
+.cur-ring.is-hidden,
+.cur-dot.is-hidden {
+  opacity: 0;
+}
+
+/* magnetic buttons ease back smoothly */
+[data-magnetic] {
+  transition: translate 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ---------- Loading screen (chrome S + counter) ---------- */
+.loading-screen {
+  flex-direction: column;
+  transition: opacity 0.8s ease;
+  overflow: hidden;
+}
+
+.ld-glow {
+  position: absolute;
+  width: min(80vw, 640px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(118, 68, 255, 0.4), transparent 65%);
+  animation: ldPulse 2.4s ease-in-out infinite;
+}
+
+.ld-s {
+  position: relative;
+  width: clamp(150px, 22vw, 240px);
+  height: auto;
+  animation: ldFloat 2.4s ease-in-out infinite;
+  filter: drop-shadow(0 0 30px rgba(118, 68, 255, 0.6));
+}
+
+.loading-screen.is-hidden .ld-s {
+  transform: scale(1.15);
+  transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.ld-foot {
+  position: absolute;
+  left: clamp(20px, 4vw, 56px);
+  right: clamp(20px, 4vw, 56px);
+  bottom: clamp(28px, 6vh, 56px);
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+.ld-name {
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: rgba(244, 241, 234, 0.6);
+}
+
+.ld-count {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(64px, 12vw, 160px);
+  line-height: 0.8;
+  letter-spacing: -0.05em;
+  color: #fff;
+  font-variant-numeric: tabular-nums;
+}
+
+.ld-count small {
+  font-size: 0.32em;
+  margin-left: 0.08em;
+  color: #b59cff;
+}
+
+.ld-bar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 3px;
+  background: rgba(181, 156, 255, 0.12);
+}
+
+.ld-bar span {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, #5b2fe0, #7644ff, #c9b8ff);
+  box-shadow: 0 0 14px rgba(118, 68, 255, 0.9);
+  transform-origin: left center;
+  transition: transform 0.2s linear;
+}
+
+@keyframes ldPulse {
+  0%, 100% { scale: 0.9; opacity: 0.7; }
+  50% { scale: 1.08; opacity: 1; }
+}
+
+@keyframes ldFloat {
+  0%, 100% { translate: 0 0; }
+  50% { translate: 0 -10px; }
+}
+
+/* ---------- Spinning badge (hero) ---------- */
+.spin-badge {
+  position: absolute;
+  right: clamp(56px, 7vw, 120px);
+  bottom: clamp(70px, 14vh, 150px);
+  z-index: 13;
+  width: clamp(120px, 11vw, 160px);
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(20, 12, 40, 0.35);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  box-shadow: inset 0 0 0 1px rgba(181, 156, 255, 0.3), 0 20px 50px -20px rgba(118, 68, 255, 0.8);
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+.hero {
+  position: relative;
+}
+
+.spin-ring {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  animation: spinBadge 14s linear infinite;
+}
+
+.spin-ring text {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 15.5px;
+  letter-spacing: 0.04em;
+  fill: #e6dcff;
+}
+
+.spin-s {
+  width: 46%;
+  height: auto;
+  filter: drop-shadow(0 0 14px rgba(118, 68, 255, 0.8));
+  transition: scale 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.spin-badge:hover .spin-s {
+  scale: 1.12;
+}
+
+.spin-badge:hover .spin-ring {
+  animation-duration: 6s;
+}
+
+@keyframes spinBadge {
+  to { rotate: 360deg; }
+}
+
+@media (max-width: 640px) {
+  .spin-badge {
+    display: none;
+  }
+}
+
+/* ---------- Live Dubai clock + name scramble (hero corners) ---------- */
+.dubai-clock {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-variant-numeric: tabular-nums;
+}
+
+.dubai-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #4ade80;
+  box-shadow: 0 0 8px rgba(74, 222, 128, 0.9);
+  animation: dubaiBlink 2s ease-in-out infinite;
+}
+
+@keyframes dubaiBlink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+
+.hero-chrome .hm-name {
+  pointer-events: auto;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Headline reveal (RevealText) ---------- */
+.rv-mask {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+  padding-bottom: 0.08em;
+  margin-bottom: -0.08em;
+}
+
+.rv-word {
+  display: inline-block;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ld-glow,
+  .ld-s,
+  .spin-ring,
+  .dubai-dot {
+    animation: none;
+  }
 }

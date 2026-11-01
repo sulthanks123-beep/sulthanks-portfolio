@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion'
+import { RevealText } from './Flair'
 import { ZooopLogo } from './ZooopLogo'
 import { SOCIAL_ICONS } from './SocialIcons'
 import { FOCUS_POINTS } from '../data/focusPoints'
@@ -261,15 +262,7 @@ export default function Resume({ lang }: { lang: 'en' | 'zh' }) {
   const data = RESUME[lang]
   return (
     <section className="resume" lang={lang}>
-      <motion.h2
-        className="resume-title"
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: '-10% 0px' }}
-        transition={{ duration: 0.7, ease: EASE }}
-      >
-        {data.title}
-      </motion.h2>
+      <RevealText className="resume-title" text={data.title} />
       <div className="timeline">
         {data.entries.map((e, i) => (
           <Entry key={i} entry={e} index={i} />

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { scrollToEl } from './smoothScroll'
 
 // Floating glass menu: appears after the hero, highlights the section in view,
 // and scrolls smoothly to each one. Sections are found by selector, so the
@@ -39,7 +40,7 @@ export default function FloatingNav() {
 
   const go = (sel: string) => {
     const el = document.querySelector(sel)
-    if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY, behavior: 'smooth' })
+    if (el) scrollToEl(el)
   }
 
   return (
@@ -69,7 +70,7 @@ export default function FloatingNav() {
               </li>
             ))}
           </ul>
-          <button type="button" className={`fnav-cta${active === 'Contact' ? ' is-active' : ''}`} onClick={() => go('#contact')}>
+          <button type="button" data-magnetic className={`fnav-cta${active === 'Contact' ? ' is-active' : ''}`} onClick={() => go('#contact')}>
             Let's talk
           </button>
         </motion.nav>
