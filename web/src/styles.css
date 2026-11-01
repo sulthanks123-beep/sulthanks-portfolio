@@ -3631,3 +3631,9 @@ html.has-cursor select {
     grid-template-columns: 1fr;
   }
 }
+
+/* calculator now sits inside the dark lower section, right after the works bands */
+.extras .calc {
+  margin-top: 0;
+  margin-bottom: clamp(96px, 14vh, 160px);
+}

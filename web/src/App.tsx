@@ -7,7 +7,6 @@ import Scene from './scene/Scene'
 import Resume from './ui/Resume'
 import Works from './ui/Works'
 import Extras from './ui/Extras'
-import BudgetCalc from './ui/BudgetCalc'
 import FloatingNav from './ui/FloatingNav'
 import CustomCursor from './ui/CustomCursor'
 import { DubaiClock, ScrambleText, SpinBadge } from './ui/Flair'
@@ -195,7 +194,6 @@ export default function App() {
       <main className="content">
         <Hero lang={lang} cueOpacity={cueOpacity} />
         <Resume lang={lang} />
-        <BudgetCalc />
         <Works lang={lang} innerRef={worksRef} />
         <Extras />
       </main>

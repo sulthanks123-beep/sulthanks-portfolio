@@ -4,6 +4,7 @@ import { STATS, SERVICES, STEPS, CREATIVES, TESTIMONIALS, CONTACT } from '../dat
 import { Star, TiltedBands, ScrollBanner } from './Banners'
 import { RevealText } from './Flair'
 import Footer from './Footer'
+import BudgetCalc from './BudgetCalc'
 
 // Sections below Works: numbers, services, process, creatives, testimonials, contact.
 // Content lives in data/extras.ts.
@@ -420,6 +421,7 @@ export default function Extras() {
   return (
     <div className="extras">
       <TiltedBands />
+      <BudgetCalc />
       <div className="ex-orbs" aria-hidden="true">
         <span />
         <span />
