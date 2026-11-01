@@ -202,6 +202,117 @@ function WhatsAppIcon() {
   )
 }
 
+function PhoneIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" className="ct-svg">
+      <path
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinejoin="round"
+        d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"
+      />
+    </svg>
+  )
+}
+
+function MailIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" className="ct-svg">
+      <rect x="3" y="5" width="18" height="14" rx="3" fill="none" stroke="currentColor" strokeWidth="1.8" />
+      <path d="M4 7l8 6 8-6" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  )
+}
+
+function CheckIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" className="ct-act-svg">
+      <path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  )
+}
+
+function CopyIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" className="ct-act-svg">
+      <rect x="8" y="8" width="12" height="12" rx="2.5" fill="none" stroke="currentColor" strokeWidth="1.8" />
+      <path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2" fill="none" stroke="currentColor" strokeWidth="1.8" />
+    </svg>
+  )
+}
+
+// Contact tiles: tap the tile to open WhatsApp / dial / email; the button on the right
+// chats (WhatsApp) or copies the number/address and confirms with a check mark.
+function ContactTiles() {
+  const [copied, setCopied] = useState<string | null>(null)
+  const copy = async (key: string, value: string, fallback: string) => {
+    try {
+      await navigator.clipboard.writeText(value)
+      setCopied(key)
+      setTimeout(() => setCopied((c) => (c === key ? null : c)), 2000)
+    } catch {
+      window.location.href = fallback
+    }
+  }
+  const phone = CONTACT.phone.replace('tel:', '')
+  return (
+    <ul className="ct-list">
+      <li className="ct-tile is-wa">
+        <a className="ct-main" href={CONTACT.whatsapp} target="_blank" rel="noopener noreferrer">
+          <span className="ct-icon">
+            <WhatsAppIcon />
+          </span>
+          <span className="ct-text">
+            <span className="ct-label">
+              WhatsApp <span className="ct-tag">Fastest reply</span>
+            </span>
+            <span className="ct-value">+91 97458 50621</span>
+          </span>
+        </a>
+        <a className="ct-act" href={CONTACT.whatsapp} target="_blank" rel="noopener noreferrer" tabIndex={-1} aria-hidden="true">
+          Chat
+        </a>
+      </li>
+      <li className="ct-tile">
+        <a className="ct-main" href={CONTACT.phone}>
+          <span className="ct-icon">
+            <PhoneIcon />
+          </span>
+          <span className="ct-text">
+            <span className="ct-label">Call (UAE)</span>
+            <span className="ct-value">+971 50 605 2016</span>
+          </span>
+        </a>
+        <button type="button" className="ct-act" onClick={() => copy('phone', phone, CONTACT.phone)} aria-label="Copy phone number">
+          {copied === 'phone' ? <CheckIcon /> : <CopyIcon />}
+          <span>{copied === 'phone' ? 'Copied' : 'Copy'}</span>
+        </button>
+      </li>
+      <li className="ct-tile">
+        <a className="ct-main" href={`mailto:${CONTACT.email}`}>
+          <span className="ct-icon">
+            <MailIcon />
+          </span>
+          <span className="ct-text">
+            <span className="ct-label">Email</span>
+            <span className="ct-value">{CONTACT.email}</span>
+          </span>
+        </a>
+        <button
+          type="button"
+          className="ct-act"
+          onClick={() => copy('email', CONTACT.email, `mailto:${CONTACT.email}`)}
+          aria-label="Copy email address"
+        >
+          {copied === 'email' ? <CheckIcon /> : <CopyIcon />}
+          <span>{copied === 'email' ? 'Copied' : 'Copy'}</span>
+        </button>
+      </li>
+    </ul>
+  )
+}
+
 function Contact() {
   const [lead, setLead] = useState<Lead>({ name: '', business: '', contact: '', needs: [], budget: '', message: '' })
   const [sent, setSent] = useState(false)
@@ -242,19 +353,7 @@ function Contact() {
               <span>3</span>We plan your first campaign together
             </li>
           </ol>
-          <ul className="ex-contact-links">
-            <li>
-              <a href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a>
-            </li>
-            <li>
-              <a href={CONTACT.phone}>{CONTACT.phoneLabel}</a>
-            </li>
-            <li>
-              <a href={CONTACT.whatsapp} target="_blank" rel="noopener noreferrer">
-                {CONTACT.whatsappLabel}
-              </a>
-            </li>
-          </ul>
+          <ContactTiles />
         </motion.div>
 
         <motion.form className="lead glass" name="contact" onSubmit={onSubmit} onPointerMove={spot} {...reveal}>
