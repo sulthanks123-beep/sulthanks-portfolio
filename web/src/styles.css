@@ -3474,3 +3474,160 @@ html.has-cursor select {
     translate: 0 0;
   }
 }
+
+/* ---------- Budget calculator (BudgetCalc.tsx), between résumé and works ---------- */
+.calc {
+  position: relative;
+  z-index: 2;
+  width: min(1120px, 100% - 32px);
+  margin: clamp(40px, 8vh, 100px) auto clamp(120px, 18vh, 200px);
+}
+
+.calc-title {
+  max-width: 14ch;
+  margin-bottom: clamp(28px, 4vh, 44px);
+  text-shadow: 0 4px 30px rgba(0, 0, 0, 0.6);
+}
+
+.calc-card {
+  display: grid;
+  grid-template-columns: 1.05fr 1fr;
+  gap: clamp(24px, 4vw, 56px);
+  padding: clamp(24px, 3.4vw, 44px);
+  background: linear-gradient(140deg, rgba(20, 12, 40, 0.72), rgba(8, 6, 16, 0.78) 60%, rgba(118, 68, 255, 0.16));
+}
+
+.calc-q {
+  display: block;
+  font-size: 15px;
+  color: rgba(244, 241, 234, 0.65);
+  margin-bottom: 12px;
+}
+
+.calc-goals {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 30px;
+}
+
+.calc-budget {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(40px, 5vw, 64px);
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: #fff;
+  font-variant-numeric: tabular-nums;
+  margin-bottom: 18px;
+}
+
+.calc-budget small {
+  font-size: 0.36em;
+  letter-spacing: 0;
+  margin-right: 0.3em;
+  color: #b59cff;
+  vertical-align: 0.9em;
+}
+
+/* custom slider: purple fill up to the thumb, glowing chrome thumb */
+.calc-range {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 10px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #5b2fe0, #8a5cff var(--fill), rgba(255, 255, 255, 0.1) var(--fill));
+  outline: none;
+  cursor: pointer;
+}
+
+.calc-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 3px solid #fff;
+  background: radial-gradient(circle at 35% 30%, #f2ecff, #8a5cff 60%, #5b2fe0);
+  box-shadow: 0 0 0 6px rgba(118, 68, 255, 0.25), 0 8px 24px rgba(118, 68, 255, 0.9);
+  transition: box-shadow 0.2s ease, scale 0.2s ease;
+}
+
+.calc-range::-moz-range-thumb {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 3px solid #fff;
+  background: radial-gradient(circle at 35% 30%, #f2ecff, #8a5cff 60%, #5b2fe0);
+  box-shadow: 0 0 0 6px rgba(118, 68, 255, 0.25), 0 8px 24px rgba(118, 68, 255, 0.9);
+}
+
+.calc-range:active::-webkit-slider-thumb,
+.calc-range:focus-visible::-webkit-slider-thumb {
+  scale: 1.12;
+  box-shadow: 0 0 0 10px rgba(118, 68, 255, 0.3), 0 8px 28px rgba(118, 68, 255, 1);
+}
+
+.calc-scale {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+  font-size: 12px;
+  color: rgba(244, 241, 234, 0.45);
+}
+
+.calc-result {
+  display: flex;
+  flex-direction: column;
+  padding: clamp(22px, 2.6vw, 32px);
+  border-radius: 22px;
+  border: 1px solid rgba(181, 156, 255, 0.25);
+  background: radial-gradient(120% 120% at 100% 0%, rgba(118, 68, 255, 0.28), rgba(0, 0, 0, 0.35) 60%);
+}
+
+.calc-number {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0 0.12em;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(44px, 5.6vw, 76px);
+  line-height: 1;
+  letter-spacing: -0.04em;
+  font-variant-numeric: tabular-nums;
+  background: linear-gradient(120deg, #fff 25%, #c9b8ff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.calc-dash {
+  color: rgba(201, 184, 255, 0.6);
+  -webkit-text-fill-color: rgba(201, 184, 255, 0.6);
+}
+
+.calc-unit {
+  margin-top: 10px;
+  font-size: 17px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.calc-source {
+  margin: 18px 0 24px;
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: rgba(244, 241, 234, 0.5);
+}
+
+.calc-cta {
+  margin-top: auto;
+  width: 100%;
+}
+
+@media (max-width: 760px) {
+  .calc-card {
+    grid-template-columns: 1fr;
+  }
+}
