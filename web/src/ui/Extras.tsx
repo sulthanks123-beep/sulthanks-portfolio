@@ -3,6 +3,7 @@ import { motion } from 'framer-motion'
 import { STATS, SERVICES, STEPS, CREATIVES, TESTIMONIALS, CONTACT } from '../data/extras'
 import { Star, TiltedBands, ScrollBanner } from './Banners'
 import { RevealText } from './Flair'
+import Footer from './Footer'
 
 // Sections below Works: numbers, services, process, creatives, testimonials, contact.
 // Content lives in data/extras.ts.
@@ -313,23 +314,6 @@ function Contact() {
         </motion.form>
       </div>
     </section>
-  )
-}
-
-function Footer() {
-  return (
-    <footer className="ex-footer">
-      <span>© {new Date().getFullYear()} Sulthan K S · Performance Marketer · Dubai</span>
-      <span className="ex-footer-links">
-        <a href={CONTACT.linkedin} target="_blank" rel="noopener noreferrer">
-          LinkedIn
-        </a>
-        <a href={CONTACT.instagram} target="_blank" rel="noopener noreferrer">
-          Instagram
-        </a>
-        <a href={`mailto:${CONTACT.email}`}>Email</a>
-      </span>
-    </footer>
   )
 }
 
