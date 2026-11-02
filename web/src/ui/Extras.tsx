@@ -1,6 +1,6 @@
 import { useState, type FormEvent, type PointerEvent } from 'react'
 import { motion } from 'framer-motion'
-import { STATS, SERVICES, STEPS, CREATIVES, TESTIMONIALS, CONTACT, BRANDS } from '../data/extras'
+import { STATS, SERVICES, STEPS, CREATIVES, TESTIMONIALS, CONTACT } from '../data/extras'
 import { Star, TiltedBands, ScrollBanner } from './Banners'
 import { RevealText } from './Flair'
 import Footer from './Footer'
@@ -42,33 +42,6 @@ function Stats() {
           <span className="ex-stat-label">{s.label}</span>
         </motion.div>
       ))}
-    </section>
-  )
-}
-
-// Slow, endless strip of brand logos; greyscale until hovered, pauses on hover
-function LogoStrip() {
-  const row = [...BRANDS, ...BRANDS]
-  return (
-    <section className="logos" aria-label="Brands I've worked with">
-      <p className="logos-cap">Brands I’ve worked with</p>
-      <div className="logos-viewport">
-        <div className="logos-track">
-          {[0, 1].map((half) => (
-            <ul className="logos-row" key={half} aria-hidden={half === 1}>
-              {row.map((b, i) => (
-                <li className="logos-item" key={`${b.name}-${i}`} title={b.name}>
-                  {b.logo ? (
-                    <img src={BASE + b.logo} alt={half === 0 && i < BRANDS.length ? b.name : ''} loading="lazy" />
-                  ) : (
-                    <span className="logos-word">{b.name}</span>
-                  )}
-                </li>
-              ))}
-            </ul>
-          ))}
-        </div>
-      </div>
     </section>
   )
 }
@@ -456,7 +429,6 @@ export default function Extras() {
         <span />
       </div>
       <Stats />
-      <LogoStrip />
       <Services />
       <Process />
       <Creatives />

@@ -66,21 +66,6 @@ export const STEPS: Step[] = [
   { title: 'Optimise', body: 'Weekly tuning and clear reports: cut what does not perform, scale what does.' },
 ]
 
-// Logo strip: brands Sulthan has worked with (logo image if we have one, otherwise a text mark)
-export interface Brand {
-  name: string
-  logo?: string // path under public/
-}
-
-export const BRANDS: Brand[] = [
-  { name: 'Al Aseel Business Hub', logo: 'images/logos/al-aseel.webp' },
-  { name: 'Xylem Learning', logo: 'images/logos/xylem.webp' },
-  { name: 'Dotcom Creativez', logo: 'images/logos/dotcom.webp' },
-  { name: 'Dotin Digital Academy', logo: 'images/logos/dotin.webp' },
-  { name: 'WayHomes' },
-  { name: 'Offenso Hackers Academy' },
-]
-
 // Ad creatives gallery: the section stays hidden while this list is empty.
 export const CREATIVES: Creative[] = []
 
