@@ -9,6 +9,7 @@ import Works from './ui/Works'
 import Extras from './ui/Extras'
 import FloatingNav from './ui/FloatingNav'
 import CustomCursor from './ui/CustomCursor'
+import { StarHuntLayer } from './ui/StarHunt'
 import { DubaiClock, ScrambleText, SpinBadge } from './ui/Flair'
 import { startSmoothScroll } from './ui/smoothScroll'
 import LoadingScreen from './ui/LoadingScreen'
@@ -183,6 +184,9 @@ export default function App() {
 
       {/* Film-grain overlay turned off: it showed as dark specks on the character's face */}
       {/* <NoiseOverlay /> */}
+
+      {/* Star hunt: toasts, confetti, reward card */}
+      <StarHuntLayer />
 
       {/* Desktop cursor + magnetic buttons */}
       <CustomCursor />

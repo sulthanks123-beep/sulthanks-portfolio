@@ -5,6 +5,7 @@ import remarkGfm from 'remark-gfm'
 import rehypeRaw from 'rehype-raw'
 import { WORKS, SECTION_COVERS, type WorkListItem, type WorkSection, type WorksLang } from '../data/works'
 import { pauseSmoothScroll } from './smoothScroll'
+import { HiddenStar } from './StarHunt'
 import { getWorkDoc } from '../data/workDocs'
 
 const EASE = [0.22, 1, 0.36, 1]
@@ -46,6 +47,7 @@ function SectionCard({
   const cover = SECTION_COVERS[section.id]
   return (
     <div className="wk-card">
+      {section.id === 'training' && <HiddenStar id="works" className="hs-works" />}
       <div className="wk-card-head">
         <span className="wk-card-no">{section.no}</span>
         <h3 className="wk-card-title">{section.title}</h3>

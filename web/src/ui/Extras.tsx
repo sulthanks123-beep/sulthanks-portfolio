@@ -4,6 +4,7 @@ import { STATS, SERVICES, STEPS, CREATIVES, TESTIMONIALS, CONTACT } from '../dat
 import { Star, TiltedBands, ScrollBanner } from './Banners'
 import { RevealText } from './Flair'
 import Footer from './Footer'
+import { HiddenStar } from './StarHunt'
 import BudgetCalc from './BudgetCalc'
 
 // Sections below Works: numbers, services, process, creatives, testimonials, contact.
@@ -70,8 +71,9 @@ function Services() {
 
 function Process() {
   return (
-    <section className="ex-section" id="process">
+    <section className="ex-section ex-process" id="process">
       <Heading title="How I work" />
+      <HiddenStar id="process" className="hs-process" />
       <ol className="ex-steps">
         {STEPS.map((s, i) => (
           <motion.li key={s.title} className="ex-step glass" onPointerMove={spot} {...reveal} transition={{ ...reveal.transition, delay: i * 0.08 }}>

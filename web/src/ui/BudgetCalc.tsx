@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { animate } from 'framer-motion'
 import { CONTACT } from '../data/extras'
 import { RevealText } from './Flair'
+import { HiddenStar } from './StarHunt'
 
 // "What could your ad budget do?" — drag a monthly budget, pick a goal, see a rough range
 // worked out from the cost ranges of Sulthan's past campaigns, then send it to WhatsApp.
@@ -117,6 +118,7 @@ export default function BudgetCalc() {
     <section className="calc" id="calculator" aria-label="Ad budget calculator">
       <RevealText className="ex-title calc-title" text="What could your ad budget do?" />
       <div className="calc-card glass">
+        <HiddenStar id="calc" className="hs-calc" />
         <div className="calc-controls">
           <p className="calc-q">I want</p>
           <div className="calc-goals" role="radiogroup" aria-label="Goal">
