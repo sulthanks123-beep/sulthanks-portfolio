@@ -3637,3 +3637,24 @@ html.has-cursor select {
   margin-top: 0;
   margin-bottom: clamp(96px, 14vh, 160px);
 }
+
+/* performance: animate these on the GPU instead of repainting each frame */
+.ex-orbs span,
+.ex-stat,
+.bn-track,
+.spin-ring {
+  will-change: transform, translate;
+}
+
+/* performance: glass cards in the dark lower section skip the live blur (it re-blurs the
+   drifting glows behind them every frame, and barely shows on black). Same look, far
+   cheaper. The floating menu keeps its blur. */
+.extras .glass,
+.extras .ex-kicker {
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+.extras .glass {
+  background: linear-gradient(140deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.03) 55%, rgba(118, 68, 255, 0.1)),
+    rgba(10, 7, 20, 0.55);
+}

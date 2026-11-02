@@ -94,6 +94,23 @@ function LangToggle({ lang, onToggle }: { lang: Lang; onToggle: () => void }) {
 export default function App() {
   const [lang, setLang] = useState<Lang>('en')
   useEffect(() => startSmoothScroll(), [])
+
+  // Stop redrawing the 3D scene while the opaque lower section (.extras) fully covers the
+  // screen; it resumes as soon as you scroll back up. Saves the GPU most of the page.
+  const [sceneHidden, setSceneHidden] = useState(false)
+  useEffect(() => {
+    const check = () => {
+      const ex = document.querySelector('.extras')
+      setSceneHidden(!!ex && ex.getBoundingClientRect().top <= -2)
+    }
+    check()
+    window.addEventListener('scroll', check, { passive: true })
+    window.addEventListener('resize', check)
+    return () => {
+      window.removeEventListener('scroll', check)
+      window.removeEventListener('resize', check)
+    }
+  }, [])
   const { scrollY } = useScroll()
   // 作品区蒙层：以作品区顶部从视口底进入到视口中部的进度，驱动 3D 渐暗 + 模糊
   const worksRef = useRef(null)
@@ -127,6 +144,7 @@ export default function App() {
       {/* 固定的 3D 背景 */}
       <div className="scene-bg">
         <Canvas
+          frameloop={sceneHidden ? 'never' : 'always'}
           shadows={{ type: THREE.PCFShadowMap }}
           dpr={[1, 1.5]}
           camera={{ position: [0, 5, 19], fov: 39, near: 0.1, far: 500 }}
