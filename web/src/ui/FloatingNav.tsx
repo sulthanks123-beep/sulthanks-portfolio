@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { scrollToEl } from './smoothScroll'
-import { StarCounter } from './StarHunt'
 
 // Floating glass menu: appears after the hero, highlights the section in view,
 // and scrolls smoothly to each one. Sections are found by selector, so the
@@ -71,7 +70,6 @@ export default function FloatingNav() {
               </li>
             ))}
           </ul>
-          <StarCounter />
           <button type="button" data-magnetic className={`fnav-cta${active === 'Contact' ? ' is-active' : ''}`} onClick={() => go('#contact')}>
             Let's talk
           </button>

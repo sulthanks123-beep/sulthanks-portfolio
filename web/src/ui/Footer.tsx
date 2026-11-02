@@ -3,7 +3,6 @@ import { motion } from 'framer-motion'
 import { CONTACT } from '../data/extras'
 import { DubaiClock } from './Flair'
 import { scrollToEl } from './smoothScroll'
-import { HiddenStar } from './StarHunt'
 
 const NAV = [
   { label: 'About', sel: '.hero' },
@@ -107,7 +106,6 @@ export default function Footer() {
         Sulthan
       </motion.div>
 
-      <HiddenStar id="footer" className="hs-footer" />
       <div className="ft-bar">
         <span>© {new Date().getFullYear()} Sulthan K S · Performance marketer</span>
         <button type="button" className="ft-top" onClick={() => go('.hero')}>

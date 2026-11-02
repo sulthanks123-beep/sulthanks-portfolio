@@ -1,6 +1,5 @@
 import { motion } from 'framer-motion'
 import { RevealText } from './Flair'
-import { HiddenStar } from './StarHunt'
 import { ZooopLogo } from './ZooopLogo'
 import { SOCIAL_ICONS } from './SocialIcons'
 import { FOCUS_POINTS } from '../data/focusPoints'
@@ -264,7 +263,6 @@ export default function Resume({ lang }: { lang: 'en' | 'zh' }) {
   return (
     <section className="resume" lang={lang}>
       <RevealText className="resume-title" text={data.title} />
-      <HiddenStar id="resume" className="hs-resume" />
       <div className="timeline">
         {data.entries.map((e, i) => (
           <Entry key={i} entry={e} index={i} />
