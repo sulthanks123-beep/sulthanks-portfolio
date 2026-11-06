@@ -3,7 +3,6 @@ import { useThree, useFrame } from '@react-three/fiber'
 import { useGLTF, useTexture } from '@react-three/drei'
 import { EffectComposer, Bloom, DepthOfField, SMAA } from '@react-three/postprocessing'
 import * as THREE from 'three'
-import Env from './Env'
 import { FOCUS_POINTS, FRAMES_PER_NODE } from '../data/focusPoints'
 
 useGLTF.preload(`${import.meta.env.BASE_URL}models/me.glb`)
@@ -111,7 +110,6 @@ function GradientBackground() {
 // 所有光源（HDRI 环境 + 半球 + 主/补方向光）
 function Lights() {
   const c = {
-    envIntensity: 0.85,
     hemiIntensity: 1.15,
     hemiSky: '#ffffff',
     hemiGround: '#404040',
@@ -125,15 +123,6 @@ function Lights() {
 
   return (
     <>
-      <Env
-        intensity={c.envIntensity}
-        rotationX={0}
-        rotationY={0}
-        rotationZ={0}
-        asBackground={false}
-        bgIntensity={0.4}
-        bgBlur={0}
-      />
       <hemisphereLight args={[c.hemiSky, c.hemiGround, c.hemiIntensity]} />
       <directionalLight
         position={c.keyPos}
