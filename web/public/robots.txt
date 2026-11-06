@@ -1,0 +1,5 @@
+# Everyone welcome, including AI assistants (GPTBot, ClaudeBot, PerplexityBot, Google-Extended)
+User-agent: *
+Allow: /
+
+Sitemap: https://aboutsulthan.vercel.app/sitemap.xml

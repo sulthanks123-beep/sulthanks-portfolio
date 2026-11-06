@@ -1,6 +1,6 @@
 import { useState, type FormEvent, type PointerEvent } from 'react'
 import { motion } from 'framer-motion'
-import { STATS, SERVICES, STEPS, CREATIVES, TESTIMONIALS, CONTACT } from '../data/extras'
+import { STATS, SERVICES, STEPS, CREATIVES, TESTIMONIALS, CONTACT, FAQS } from '../data/extras'
 import { Star, TiltedBands, ScrollBanner } from './Banners'
 import { RevealText } from './Flair'
 import Footer from './Footer'
@@ -81,6 +81,26 @@ function Process() {
           </motion.li>
         ))}
       </ol>
+    </section>
+  )
+}
+
+// FAQ: native <details> accordion (keyboard + screen-reader friendly, no JS)
+function Faq() {
+  return (
+    <section className="ex-section" id="faq">
+      <Heading title="Questions, answered" />
+      <div className="faq-list">
+        {FAQS.map((f, i) => (
+          <details className="faq-item glass" key={f.q} open={i === 0}>
+            <summary>
+              <h3>{f.q}</h3>
+              <span className="faq-icon" aria-hidden="true" />
+            </summary>
+            <p>{f.a}</p>
+          </details>
+        ))}
+      </div>
     </section>
   )
 }
@@ -431,6 +451,7 @@ export default function Extras() {
       <Stats />
       <Services />
       <Process />
+      <Faq />
       <Creatives />
       <Testimonials />
       <ScrollBanner text="Let's grow your brand" />
