@@ -31,7 +31,7 @@ type Lang = 'en' | 'zh'
 const ABOUT = {
   title: 'About Sulthan',
   paragraphs: [
-    "I'm Sulthan — a performance marketer and growth strategist for founders. I build content and ads that convert, with Meta Ads, content and strategy behind 20+ brands. Based in Dubai, UAE. From Kerala, India.",
+    "I'm Sulthan — a digital marketer in Dubai and performance marketing specialist for founders. I build ads and content that convert, with Meta Ads, Google Ads and strategy behind 20+ brands. Based in Dubai, UAE. From Kerala, India.",
   ],
 }
 const COPY = { en: ABOUT, zh: ABOUT }
@@ -64,6 +64,8 @@ function Hero({ lang, cueOpacity }: { lang: Lang; cueOpacity: MotionValue<number
         <div className="about-intro">
           <motion.h1 className="about-title" style={{ y: titleY, letterSpacing: titleSpacing }}>
             {title}
+            {/* keyword for search engines and screen readers; the visible title stays short */}
+            <span className="sr-only">, digital marketer in Dubai</span>
           </motion.h1>
           {paragraphs.map((p, i) => (
             <motion.p key={i} className="about-body" style={{ y: bodyY }}>
