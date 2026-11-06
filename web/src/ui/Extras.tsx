@@ -61,6 +61,15 @@ function Services() {
                 <li key={p}>{p}</li>
               ))}
             </ul>
+            {s.links && (
+              <p className="ex-card-links">
+                {s.links.map((l) => (
+                  <a key={l.href} href={`${import.meta.env.BASE_URL}${l.href}`}>
+                    {l.label} →
+                  </a>
+                ))}
+              </p>
+            )}
           </motion.article>
         ))}
       </div>

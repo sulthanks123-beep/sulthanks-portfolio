@@ -9,6 +9,7 @@ export interface Service {
   title: string
   body: string
   points: string[]
+  links?: { label: string; href: string }[] // static service pages under public/
 }
 
 export interface Step {
@@ -41,11 +42,16 @@ export const SERVICES: Service[] = [
     title: 'Meta & Google Ads',
     body: 'Campaigns built around leads and sales, not likes.',
     points: ['Campaign strategy and setup', 'Audience and regional targeting', 'Daily optimisation and reporting'],
+    links: [
+      { label: 'Meta Ads in Dubai', href: 'meta-ads-dubai/' },
+      { label: 'Google Ads in Dubai', href: 'google-ads-dubai/' },
+    ],
   },
   {
     title: 'WhatsApp lead generation',
     body: 'Ads that start real conversations with your sales team.',
     points: ['Click-to-WhatsApp campaigns', 'Influencer-led video creatives', 'Malayalam, English and regional ads'],
+    links: [{ label: 'WhatsApp leads in UAE', href: 'whatsapp-lead-generation-uae/' }],
   },
   {
     title: 'E-commerce growth',

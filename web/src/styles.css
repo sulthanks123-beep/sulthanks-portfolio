@@ -3172,7 +3172,7 @@ html.has-cursor select {
 
 .ft-cols {
   display: grid;
-  grid-template-columns: 1fr 1.3fr 1fr;
+  grid-template-columns: 1fr 1.1fr 1.3fr 1fr;
   gap: 32px;
   padding: clamp(36px, 6vh, 56px) 0;
 }
@@ -3289,9 +3289,6 @@ html.has-cursor select {
     grid-template-columns: 1fr 1fr;
   }
 
-  .ft-col:last-child {
-    grid-column: 1 / -1;
-  }
 
   .ft-sign {
     font-size: 30vw;
@@ -3745,3 +3742,8 @@ html.has-cursor select {
 
 /* visually hidden, still read by search engines and screen readers */
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+/* links from the service cards to the static service pages */
+.ex-card-links { display: flex; flex-wrap: wrap; gap: 8px 16px; margin: 18px 0 0; }
+.ex-card-links a { color: #c9b6ff; font-weight: 600; font-size: 15px; text-decoration: none; border-bottom: 1px solid rgba(201, 182, 255, 0.35); }
+.ex-card-links a:hover { color: #fff; border-color: #fff; }

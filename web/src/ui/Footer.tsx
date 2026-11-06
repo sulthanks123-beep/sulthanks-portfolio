@@ -20,6 +20,12 @@ const SOCIAL = [
   { label: 'Google reviews', href: CONTACT.google },
 ]
 
+const SERVICE_PAGES = [
+  { label: 'Meta Ads in Dubai', href: 'meta-ads-dubai/' },
+  { label: 'Google Ads in Dubai', href: 'google-ads-dubai/' },
+  { label: 'WhatsApp leads in UAE', href: 'whatsapp-lead-generation-uae/' },
+]
+
 const go = (sel: string) => {
   const el = document.querySelector(sel)
   if (el) scrollToEl(el)
@@ -66,6 +72,19 @@ export default function Footer() {
             ))}
           </ul>
         </nav>
+
+        <div className="ft-col">
+          <h3 className="ft-h">Services</h3>
+          <ul>
+            {SERVICE_PAGES.map((s) => (
+              <li key={s.href}>
+                <a className="ft-link" href={`${import.meta.env.BASE_URL}${s.href}`}>
+                  {s.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
 
         <div className="ft-col">
           <h3 className="ft-h">Connect</h3>
