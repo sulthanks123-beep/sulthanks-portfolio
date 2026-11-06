@@ -90,6 +90,7 @@ export const CONTACT = {
   phoneLabel: 'Call (UAE) +971 50 605 2016',
   linkedin: 'https://www.linkedin.com/in/sulthan-ks/',
   instagram: 'https://www.instagram.com/_.sulth4n._/',
+  google: 'https://share.google/tU1VPpkIisabcFRtt', // Google Business Profile
   needs: ['Meta Ads', 'Google Ads', 'WhatsApp leads', 'E-commerce growth', 'Brand & content', 'Full strategy'],
   budgets: ['Under AED 2k', 'AED 2–5k', 'AED 5–15k', 'AED 15k+', 'Not sure yet'],
 }

@@ -17,6 +17,7 @@ const SOCIAL = [
   { label: 'LinkedIn', href: CONTACT.linkedin },
   { label: 'Instagram', href: CONTACT.instagram },
   { label: 'WhatsApp', href: CONTACT.whatsapp },
+  { label: 'Google reviews', href: CONTACT.google },
 ]
 
 const go = (sel: string) => {
