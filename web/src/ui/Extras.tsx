@@ -354,6 +354,7 @@ function Contact() {
     e.preventDefault()
     const url = `${CONTACT.whatsapp}?text=${encodeURIComponent(whatsappText(lead))}`
     // open straight from the click so browsers don't block it; fall back to same-tab
+    window.gtag?.('event', 'generate_lead', { method: 'contact_form' })
     const win = window.open(url, '_blank')
     if (win) win.opener = null
     else window.location.href = url

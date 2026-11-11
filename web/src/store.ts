@@ -23,6 +23,7 @@ export const useStore = create<StoreState>((set) => ({
 declare global {
   interface Window {
     __store?: typeof useStore
+    gtag?: (...args: unknown[]) => void // Google tag, defined in index.html
   }
 }
 if (import.meta.env.DEV) window.__store = useStore

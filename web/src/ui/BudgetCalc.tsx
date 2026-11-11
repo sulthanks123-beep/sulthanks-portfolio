@@ -108,6 +108,7 @@ export default function BudgetCalc() {
       'Can you put together a real plan for this?',
     ].join('\n')
     const url = `${CONTACT.whatsapp}?text=${encodeURIComponent(text)}`
+    window.gtag?.('event', 'generate_lead', { method: 'budget_calculator' })
     const win = window.open(url, '_blank')
     if (win) win.opener = null
     else window.location.href = url

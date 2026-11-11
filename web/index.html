@@ -1,6 +1,21 @@
 <!doctype html>
 <html lang="en">
   <head>
+    <!-- Google tag (Google Analytics) -->
+    <script async src="https://www.googletagmanager.com/gtm.js?id=GTM-N5FPJW27"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      // count WhatsApp, call and email link clicks as leads
+      document.addEventListener('click', function (e) {
+        var a = e.target.closest && e.target.closest('a[href]');
+        if (!a) return;
+        var h = a.getAttribute('href');
+        var m = h.indexOf('wa.me') > -1 ? 'whatsapp' : h.indexOf('tel:') === 0 ? 'phone' : h.indexOf('mailto:') === 0 ? 'email' : '';
+        if (m) gtag('event', 'generate_lead', { method: m });
+      });
+    </script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Sulthan K S — Digital Marketer in Dubai | Meta &amp; Google Ads</title>
