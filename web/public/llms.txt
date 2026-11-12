@@ -22,8 +22,8 @@ Service pages:
 - [Education marketing in UAE](https://aboutsulthan.vercel.app/education-marketing-uae/)
 
 Articles:
-- [How much do Meta Ads cost in Dubai?](https://aboutsulthan.vercel.app/blog/meta-ads-cost-dubai/)
-- [What does a WhatsApp lead cost in the UAE?](https://aboutsulthan.vercel.app/blog/whatsapp-leads-cost-uae/)
+- [How much do Meta Ads cost in Dubai?](https://aboutsulthan.vercel.app/blog/meta-ads-cost-dubai/): most small businesses start with AED 2,000–5,000 a month; in Sulthan's 2026 Dubai business-setup campaigns a WhatsApp conversation cost AED 2.28–7.74.
+- [What does a WhatsApp lead cost in the UAE?](https://aboutsulthan.vercel.app/blog/whatsapp-leads-cost-uae/): AED 2.28–7.74 per conversation in Dubai campaigns (2026); compares click-to-WhatsApp with lead forms and shows how to work out cost per customer.
 
 ## Results
 - ₹6.5M in store sales for a D2C client (WayHomes)

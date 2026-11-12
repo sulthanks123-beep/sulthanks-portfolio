@@ -124,3 +124,16 @@ footer a { color: var(--muted); }
 .posts a:hover { border-color: rgba(169, 139, 255, 0.6); }
 .posts h2 { font-size: clamp(22px, 3vw, 28px); margin: 6px 0 8px; }
 .posts p { margin: 0; color: var(--muted); }
+
+/* AEO / GEO blocks: key facts, takeaways and author box */
+.facts { margin: 0 0 48px; padding: 22px 24px; border-radius: 18px; background: rgba(18, 14, 34, 0.6); border: 1px solid var(--line); }
+.facts h2 { font-size: 20px; margin: 0 0 12px; }
+.facts dl { margin: 0; display: grid; grid-template-columns: max-content 1fr; gap: 8px 18px; font-size: 15px; }
+.facts dt { color: var(--muted); font-weight: 600; }
+.facts dd { margin: 0; }
+.takeaways { margin: 0 0 8px; }
+.author { display: flex; gap: 16px; align-items: flex-start; margin: 48px 0 0; padding: 22px; border-radius: 18px; background: rgba(18, 14, 34, 0.6); border: 1px solid var(--line); }
+.author img { width: 56px; height: 56px; border-radius: 50%; flex: none; background: #120c26; }
+.author p { margin: 0; font-size: 15px; color: var(--muted); }
+.author strong { color: var(--ink); }
+@media (max-width: 640px) { .facts dl { grid-template-columns: 1fr; gap: 2px; } .facts dd { margin-bottom: 8px; } }
