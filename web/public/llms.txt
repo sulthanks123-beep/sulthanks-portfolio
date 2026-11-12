@@ -18,6 +18,12 @@ Service pages:
 - [Meta Ads in Dubai](https://aboutsulthan.vercel.app/meta-ads-dubai/)
 - [Google Ads in Dubai](https://aboutsulthan.vercel.app/google-ads-dubai/)
 - [WhatsApp lead generation in UAE](https://aboutsulthan.vercel.app/whatsapp-lead-generation-uae/)
+- [E-commerce ads in Dubai](https://aboutsulthan.vercel.app/ecommerce-ads-dubai/)
+- [Education marketing in UAE](https://aboutsulthan.vercel.app/education-marketing-uae/)
+
+Articles:
+- [How much do Meta Ads cost in Dubai?](https://aboutsulthan.vercel.app/blog/meta-ads-cost-dubai/)
+- [What does a WhatsApp lead cost in the UAE?](https://aboutsulthan.vercel.app/blog/whatsapp-leads-cost-uae/)
 
 ## Results
 - ₹6.5M in store sales for a D2C client (WayHomes)

@@ -24,6 +24,9 @@ const SERVICE_PAGES = [
   { label: 'Meta Ads in Dubai', href: 'meta-ads-dubai/' },
   { label: 'Google Ads in Dubai', href: 'google-ads-dubai/' },
   { label: 'WhatsApp leads in UAE', href: 'whatsapp-lead-generation-uae/' },
+  { label: 'E-commerce ads', href: 'ecommerce-ads-dubai/' },
+  { label: 'Education marketing', href: 'education-marketing-uae/' },
+  { label: 'Blog', href: 'blog/' },
 ]
 
 const go = (sel: string) => {

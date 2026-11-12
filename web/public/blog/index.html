@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Google tag (Google Analytics) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-3B0C7GRZFZ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-3B0C7GRZFZ');
+      // count WhatsApp, call and email link clicks as leads
+      document.addEventListener('click', function (e) {
+        var a = e.target.closest && e.target.closest('a[href]');
+        if (!a) return;
+        var h = a.getAttribute('href');
+        var m = h.indexOf('wa.me') > -1 ? 'whatsapp' : h.indexOf('tel:') === 0 ? 'phone' : h.indexOf('mailto:') === 0 ? 'email' : '';
+        if (m) gtag('event', 'generate_lead', { method: m });
+      });
+    </script>
+    <!-- Microsoft Clarity (heatmaps + session recordings) -->
+    <script type="text/javascript">
+      (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+      })(window, document, "clarity", "script", "z9dxc50y9x");
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Blog: Ads &amp; Lead Generation in Dubai — Sulthan K S</title>
+    <meta name="description" content="Straight answers on Meta Ads, Google Ads and WhatsApp lead generation in Dubai and the UAE, with real numbers from my campaigns." />
+    <link rel="canonical" href="https://aboutsulthan.vercel.app/blog/" />
+    <link rel="icon" href="../favicon.ico" sizes="any" />
+    <link rel="apple-touch-icon" href="../apple-touch-icon.png" />
+    <meta name="theme-color" content="#000000" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Sulthan K S" />
+    <meta property="og:title" content="Blog — Sulthan K S" />
+    <meta property="og:description" content="Straight answers on ads and lead generation in Dubai, with real campaign numbers." />
+    <meta property="og:url" content="https://aboutsulthan.vercel.app/blog/" />
+    <meta property="og:image" content="https://aboutsulthan.vercel.app/og-image.jpg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600&amp;family=Syne:wght@700;800&amp;display=swap" />
+    <link rel="stylesheet" href="../services.css" />
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Blog",
+  "name": "Sulthan K S — Blog",
+  "url": "https://aboutsulthan.vercel.app/blog/",
+  "author": { "@id": "https://aboutsulthan.vercel.app/#person" },
+  "blogPost": [
+    { "@type": "BlogPosting", "headline": "How much do Meta Ads cost in Dubai? (2026 guide)", "url": "https://aboutsulthan.vercel.app/blog/meta-ads-cost-dubai/", "datePublished": "2026-11-12" },
+    { "@type": "BlogPosting", "headline": "What does a WhatsApp lead cost in the UAE?", "url": "https://aboutsulthan.vercel.app/blog/whatsapp-leads-cost-uae/", "datePublished": "2026-11-12" }
+  ]
+}
+    </script>
+  </head>
+  <body>
+    <header class="top">
+      <div class="wrap">
+        <a class="brand" href="../"><img src="../apple-touch-icon.png" alt="" width="30" height="30" /><span>Sulthan K S</span></a>
+        <a class="btn btn-sm" href="https://wa.me/919745850621" target="_blank" rel="noopener noreferrer">Let's talk</a>
+      </div>
+    </header>
+
+    <main class="wrap">
+      <nav class="crumbs" aria-label="Breadcrumb"><a href="../">Home</a> / Blog</nav>
+      <h1>The <em>blog</em></h1>
+      <p class="lead">Straight answers on ads and lead generation in Dubai and the UAE, with real numbers from my own campaigns.</p>
+
+      <div class="posts">
+        <a class="card" href="meta-ads-cost-dubai/">
+          <span class="byline">12 November 2026 · 6 min read</span>
+          <h2>How much do Meta Ads cost in Dubai?</h2>
+          <p>Starting budgets, real cost per lead and per sale, and five ways to bring your costs down.</p>
+        </a>
+        <a class="card" href="whatsapp-leads-cost-uae/">
+          <span class="byline">12 November 2026 · 5 min read</span>
+          <h2>What does a WhatsApp lead cost in the UAE?</h2>
+          <p>AED 2.28–7.74 per conversation from Dubai campaigns, WhatsApp vs lead forms, and how to turn chats into customers.</p>
+        </a>
+      </div>
+    </main>
+
+    <footer>
+      <div class="wrap">
+        <span>© 2026 Sulthan K S · Digital marketer in Dubai</span>
+        <span><a href="../">Home</a> · <a href="../meta-ads-dubai/">Meta Ads</a> · <a href="../google-ads-dubai/">Google Ads</a> · <a href="../whatsapp-lead-generation-uae/">WhatsApp leads</a> · <a href="mailto:sulthansalavudeen@gmail.com">Email</a></span>
+      </div>
+    </footer>
+  </body>
+</html>
