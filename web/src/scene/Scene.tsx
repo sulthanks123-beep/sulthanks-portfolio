@@ -58,6 +58,54 @@ const WORKS_ENTRANCE = 50 // 作品区"入场"（画廊屏幕从底部滑入覆�
 const FPS = 24 // 所有 clip @24fps 共享时间轴；相机动画总帧数运行时从 CameraAction clip 读（见 totalFrames）
 const NODE_LINE = 0.3 // 节点"终点"参考线：条目顶部到达视口该高度(从上 30%)时锁定为该节点
 
+// 上下渐变背景球（包裹相机），两端颜色可调
+function GradientBackground() {
+  // glb 相机视角很窄(~23°)，只看到渐变中间一条；陡度把可见窄带拉伸出完整过渡
+  const top = '#000000'
+  const bottom = '#7644ff'
+  const steep = 2.5
+
+  const uniforms = useMemo(
+    () => ({
+      uTop: { value: new THREE.Color() },
+      uBottom: { value: new THREE.Color() },
+      uSteep: { value: 1 },
+    }),
+    []
+  )
+  uniforms.uTop.value.set(top)
+  uniforms.uBottom.value.set(bottom)
+  uniforms.uSteep.value = steep
+
+  return (
+    <mesh scale={100}>
+      <sphereGeometry args={[1, 32, 32]} />
+      <shaderMaterial
+        side={THREE.BackSide}
+        depthWrite={false}
+        uniforms={uniforms}
+        vertexShader={/* glsl */ `
+          varying vec3 vDir;
+          void main() {
+            vDir = normalize(position);
+            gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+          }
+        `}
+        fragmentShader={/* glsl */ `
+          uniform vec3 uTop;
+          uniform vec3 uBottom;
+          uniform float uSteep;
+          varying vec3 vDir;
+          void main() {
+            // 以地平线(y=0)为中心按陡度拉伸，narrow-fov 下也能看到完整过渡
+            float t = smoothstep(0.0, 1.0, clamp(vDir.y * uSteep * 0.5 + 0.95, 0.0, 1.0));
+            gl_FragColor = vec4(mix(uBottom, uTop, t), 1.0);
+          }
+        `}
+      />
+    </mesh>
+  )
+}
 
 // 所有光源（HDRI 环境 + 半球 + 主/补方向光）
 function Lights() {
@@ -561,9 +609,6 @@ function Post2({
       e.bokehScale = THREE.MathUtils.lerp(post.focusBokeh, post.startBokeh, w)
       if (e.cocMaterial) e.cocMaterial.focusRange = THREE.MathUtils.lerp(post.focusRange, post.startRange, w)
     }
-    // Hero: the canvas is see-through, and blur there smears the character's edges into
-    // the page behind it, so the first screen stays sharp and blur fades in as you scroll.
-    e.bokehScale *= THREE.MathUtils.smoothstep(f, 8, 40)
   })
 
   return (
@@ -597,6 +642,8 @@ export default function Scene() {
   const dofRangeRef = useRef(0.15)
   return (
     <>
+      <GradientBackground />
+
       <Suspense fallback={null}>
         <Lights />
         <Man2 focusRef={focusRef} frameRef={frameRef} dofBokehRef={dofBokehRef} dofRangeRef={dofRangeRef} />

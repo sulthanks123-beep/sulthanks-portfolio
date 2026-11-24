@@ -1,6 +1,6 @@
 import { Suspense, useEffect, useRef, useState } from 'react'
 import { Canvas } from '@react-three/fiber'
-import { motion, useScroll, useTransform } from 'framer-motion'
+import { motion, useScroll, useTransform, type MotionValue } from 'framer-motion'
 import * as THREE from 'three'
 import Scene from './scene/Scene'
 // import NoiseOverlay from './ui/NoiseOverlay'
@@ -9,9 +9,8 @@ import Works from './ui/Works'
 import Extras from './ui/Extras'
 import FloatingNav from './ui/FloatingNav'
 import CustomCursor from './ui/CustomCursor'
-import { DubaiClock } from './ui/Flair'
-import { scrollToEl, startSmoothScroll } from './ui/smoothScroll'
-import HeroName from './ui/HeroName'
+import { DubaiClock, ScrambleText, SpinBadge } from './ui/Flair'
+import { startSmoothScroll } from './ui/smoothScroll'
 import LoadingScreen from './ui/LoadingScreen'
 import { useStore } from './store'
 
@@ -37,74 +36,52 @@ const ABOUT = {
 }
 const COPY = { en: ABOUT, zh: ABOUT }
 
-// Hero (Nov 2026 redesign): one statement, the about text and a link to the work, top left.
-// The giant name (HeroName) and the light beams sit behind the 3D character.
-// The previous hero is kept on the GitHub branch backup-before-hero-redesign.
-function Hero({ lang }: { lang: Lang }) {
-  const { paragraphs } = COPY[lang]
-  const { scrollY } = useScroll()
-  const vh = typeof window !== 'undefined' ? window.innerHeight : 800
-  const blur = useTransform(scrollY, [0, vh * 0.45], ['blur(0px)', 'blur(14px)'])
-  const opacity = useTransform(scrollY, [0, vh * 0.45], [1, 0])
-  const y = useTransform(scrollY, [0, vh], [0, -80])
-  const goWorks = () => {
-    const el = document.querySelector('.works')
-    if (el) scrollToEl(el)
-  }
+function Hero({ lang, cueOpacity }: { lang: Lang; cueOpacity: MotionValue<number> }) {
+  const { title, paragraphs } = COPY[lang]
+  const aboutRef = useRef(null)
+  // 触发起点提前：about 顶部位于视口 60% 处即开始（offset[0] 进度 0），到达顶部为进度 1
+  const { scrollYProgress } = useScroll({
+    target: aboutRef,
+    offset: ['start 0.5', 'start start'] // fade starts once the block's top passes mid-screen,
+  })
+  // 透明度在 about 顶部升到约 30vh 时归 0：起点 60%→进度 p 时顶部在 0.6×(1−p)，
+  // 令 =0.3 解得 p=0.5，故 opacity 区间 [0, 0.5]
+  const blur = useTransform(scrollYProgress, [0, 0.5], ['blur(0px)', 'blur(16px)'])
+  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0])
+  // 视差：标题上升更快、字距随滚动拉开；正文上升慢一点
+  const titleY = useTransform(scrollYProgress, [0, 1], [0, -96])
+  const bodyY = useTransform(scrollYProgress, [0, 1], [0, -52])
+  const titleSpacing = useTransform(scrollYProgress, [0, 1], ['0em', '0.06em']) // small: script letters must stay joined
   return (
     <section className="hero">
-      <motion.div className="hx" lang={lang} style={{ filter: blur, opacity, y }}>
-        <h1 className="sr-only">Sulthan K S, digital marketer in Dubai</h1>
-        <p className="hx-statement">
-          Performance marketing for founders who want sales, <span>not likes.</span>
-        </p>
-        {paragraphs.map((p, i) => (
-          <p key={i} className="hx-about">
-            {p}
-          </p>
-        ))}
-        <button type="button" className="hx-link" onClick={goWorks}>
-          See the work
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-            <path d="M5 12h14M13 6l6 6-6 6" />
-          </svg>
-        </button>
+      <motion.div
+        className="about"
+        lang={lang}
+        ref={aboutRef}
+        style={{ filter: blur, opacity }}
+      >
+        {/* 入场动画放内层，避免其 fill 锁住 opacity 覆盖外层滚动 opacity */}
+        <div className="about-intro">
+          <motion.h1 className="about-title" style={{ y: titleY, letterSpacing: titleSpacing }}>
+            {title}
+            {/* keyword for search engines and screen readers; the visible title stays short */}
+            <span className="sr-only">, digital marketer in Dubai</span>
+          </motion.h1>
+          {paragraphs.map((p, i) => (
+            <motion.p key={i} className="about-body" style={{ y: bodyY }}>
+              {p}
+            </motion.p>
+          ))}
+        </div>
+      </motion.div>
+      <SpinBadge />
+      <motion.div className="scroll-cue" style={{ opacity: cueOpacity }} aria-hidden="true">
+        <span className="scroll-cue-label">{lang === 'en' ? 'SCROLL' : '向下滚动'}</span>
+        <span className="scroll-cue-track">
+          <span className="scroll-cue-dot" />
+        </span>
       </motion.div>
     </section>
-  )
-}
-
-// Top bar shown over the hero; fades out as the floating menu takes over
-function HeroBar() {
-  const go = (sel: string) => {
-    const el = document.querySelector(sel)
-    if (el) scrollToEl(el)
-  }
-  return (
-    <>
-      <nav className="hc-nav" aria-label="Main">
-        <button type="button" className="hc-brand" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
-          Sulthan K S
-        </button>
-        <div className="hc-right">
-          <button type="button" className="hc-link" onClick={() => go('.works')}>Work</button>
-          <button type="button" className="hc-link" onClick={() => go('#services')}>Services</button>
-          <button type="button" className="hc-link" onClick={() => go('#process')}>Process</button>
-          <a className="hc-talk" href="https://wa.me/919745850621" target="_blank" rel="noopener noreferrer">
-            Let’s talk
-            <i aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M5 12h14M13 6l6 6-6 6" />
-              </svg>
-            </i>
-          </a>
-        </div>
-      </nav>
-      <div className="hc-place">
-        <b>Digital marketer in Dubai</b>
-        <DubaiClock />
-      </div>
-    </>
   )
 }
 
@@ -151,6 +128,8 @@ export default function App() {
   const fogBlur = useTransform(worksProgress, [0, 1], ['blur(0px)', 'blur(10px)'])
   // 滚动渐暗：离开首屏后压暗 3D 场景，保证履历文字可读
   const scrimOpacity = useTransform(scrollY, [0, 520], [0, 0.4])
+  // 首屏滚动提示随之淡出
+  const cueOpacity = useTransform(scrollY, [0, 160], [1, 0])
   // 首屏底部渐变底色：开始滑动后淡出
   const heroGradientOpacity = useTransform(scrollY, [0, 240], [1, 0])
   // 磨砂右轨：进入履历区后淡入（首屏不磨砂）
@@ -158,23 +137,11 @@ export default function App() {
   const railOpacity = useTransform(scrollY, [vh * 0.5, vh * 1.1], [0, 1])
   // 首屏装饰画框/角标：滚动后淡出
   const heroChromeOpacity = useTransform(scrollY, [0, 280], [1, 0])
-  const heroChromeVisibility = useTransform(heroChromeOpacity, (v) => (v < 0.02 ? 'hidden' : 'visible'))
 
   return (
     <>
       {/* 加载遮罩：模型全部加载完成前覆盖全屏，完成后淡出 */}
       <LoadingScreen />
-
-      {/* Violet light beams on grain, fixed behind everything (the canvas is see-through) */}
-      <div className="stage-light" aria-hidden="true">
-        <span className="sl-beam sl-b3" />
-        <span className="sl-beam sl-b1" />
-        <span className="sl-beam sl-b2" />
-        <span className="sl-grain" />
-      </div>
-
-      {/* Giant name: between the light and the 3D canvas, so the character stands in front */}
-      <HeroName />
 
       {/* 固定的 3D 背景 */}
       <div className="scene-bg">
@@ -183,8 +150,9 @@ export default function App() {
           shadows={{ type: THREE.PCFShadowMap }}
           dpr={[1, 1.5]}
           camera={{ position: [0, 5, 19], fov: 39, near: 0.1, far: 500 }}
-          gl={{ alpha: true, antialias: false, stencil: false, depth: true, toneMapping: THREE.ACESFilmicToneMapping }}
+          gl={{ antialias: false, stencil: false, depth: true, toneMapping: THREE.ACESFilmicToneMapping }}
         >
+          <color attach="background" args={['#0a0e16']} />
           <Suspense fallback={null}>
             <Backdrop />
             <Scene />
@@ -216,8 +184,21 @@ export default function App() {
       {/* <LangToggle lang={lang} onToggle={() => setLang((l) => (l === 'en' ? 'zh' : 'en'))} /> */}
 
       {/* 首屏装饰：发丝内框 + 四角定位标 + 角标元数据（随滚动淡出） */}
-      <motion.div className="hero-chrome" style={{ opacity: heroChromeOpacity, visibility: heroChromeVisibility }}>
-        <HeroBar />
+      <motion.div className="hero-chrome" style={{ opacity: heroChromeOpacity }} aria-hidden="true">
+        <div className="hero-frame" />
+        <span className="hero-mark tl">+</span>
+        <span className="hero-mark tr">+</span>
+        <span className="hero-mark bl">+</span>
+        <span className="hero-mark br">+</span>
+        <div className="hero-meta hm-tl">
+          <ScrambleText className="hm-name" text="Sulthan K S" />
+          <span>Performance Marketer</span>
+        </div>
+        <div className="hero-meta hm-tr">
+          <DubaiClock />
+        </div>
+        <div className="hero-meta hm-bl">Content · Ads · Strategy</div>
+        <div className="hero-meta hm-right">Based in Dubai, UAE</div>
       </motion.div>
 
       {/* Film-grain overlay turned off: it showed as dark specks on the character's face */}
@@ -231,7 +212,7 @@ export default function App() {
 
       {/* 可滚动内容 */}
       <main className="content">
-        <Hero lang={lang} />
+        <Hero lang={lang} cueOpacity={cueOpacity} />
         <Resume lang={lang} />
         <Works lang={lang} innerRef={worksRef} />
         <Extras />
