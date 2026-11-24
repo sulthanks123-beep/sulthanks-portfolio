@@ -1,3 +1,4 @@
+import type React from 'react'
 import { Suspense, useEffect, useRef, useState } from 'react'
 import { Canvas } from '@react-three/fiber'
 import { motion, useScroll, useTransform, type MotionValue } from 'framer-motion'
@@ -69,12 +70,18 @@ function Hero({ lang, cueOpacity }: { lang: Lang; cueOpacity: MotionValue<number
           </motion.h1>
           {paragraphs.map((p, i) => (
             <motion.p key={i} className="about-body" style={{ y: bodyY }}>
-              {p}
+              {/* one span per word so the opening sequence can bring them in one after another */}
+              {p.split(' ').map((w, k) => (
+                <span key={k} className="hw" style={{ '--i': k } as React.CSSProperties}>
+                  {w}{' '}
+                </span>
+              ))}
             </motion.p>
           ))}
         </div>
       </motion.div>
       <SpinBadge />
+      <div className="hero-sweep" aria-hidden="true" />
       <motion.div className="scroll-cue" style={{ opacity: cueOpacity }} aria-hidden="true">
         <span className="scroll-cue-label">{lang === 'en' ? 'SCROLL' : '向下滚动'}</span>
         <span className="scroll-cue-track">
@@ -96,6 +103,11 @@ function LangToggle({ lang, onToggle }: { lang: Lang; onToggle: () => void }) {
 export default function App() {
   const [lang, setLang] = useState<Lang>('en')
   useEffect(() => startSmoothScroll(), [])
+  // once the loader starts to fade, mark the page so the hero's opening sequence plays
+  const entered = useStore((s) => s.entered)
+  useEffect(() => {
+    document.documentElement.classList.toggle('is-entered', entered)
+  }, [entered])
 
   // Stop redrawing the 3D scene while the opaque lower section (.extras) fully covers the
   // screen; it resumes as soon as you scroll back up. Saves the GPU most of the page.

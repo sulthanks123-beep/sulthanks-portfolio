@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { useProgress } from '@react-three/drei'
+import { useStore } from '../store'
 
 // Full-screen loader shown until the 3D scene's files are in. The chrome S breathes in
 // the middle while a big counter climbs to 100, then everything fades away.
@@ -35,7 +36,10 @@ export default function LoadingScreen() {
   // once the counter shows 100: hold a moment, fade, unmount
   useEffect(() => {
     if (!reached || shown < 100) return
-    const t1 = setTimeout(() => setHiding(true), 350)
+    const t1 = setTimeout(() => {
+      setHiding(true)
+      useStore.getState().enter() // starts the hero opening sequence
+    }, 350)
     const t2 = setTimeout(() => setRemoved(true), 1250)
     return () => {
       clearTimeout(t1)

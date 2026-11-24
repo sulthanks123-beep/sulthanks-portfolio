@@ -1,5 +1,6 @@
 import { Suspense, useMemo, useRef, useEffect, type MutableRefObject } from 'react'
 import { useThree, useFrame } from '@react-three/fiber'
+import { useStore } from '../store'
 import { useGLTF, useTexture } from '@react-three/drei'
 import { EffectComposer, Bloom, DepthOfField, SMAA } from '@react-three/postprocessing'
 import * as THREE from 'three'
@@ -60,22 +61,23 @@ const NODE_LINE = 0.3 // 节点"终点"参考线：条目顶部到达视口该�
 
 // 上下渐变背景球（包裹相机），两端颜色可调
 function GradientBackground() {
-  // glb 相机视角很窄(~23°)，只看到渐变中间一条；陡度把可见窄带拉伸出完整过渡
-  const top = '#000000'
-  const bottom = '#7644ff'
-  const steep = 2.5
-
+  // Blurred purple light bands on charcoal and black with film grain, drawn in screen space
+  // so it stays put while the camera moves. The light opens up once the loader has gone.
   const uniforms = useMemo(
     () => ({
-      uTop: { value: new THREE.Color() },
-      uBottom: { value: new THREE.Color() },
-      uSteep: { value: 1 },
+      uRes: { value: new THREE.Vector2(1, 1) },
+      uTime: { value: 0 },
+      uIntro: { value: 0 },
     }),
     []
   )
-  uniforms.uTop.value.set(top)
-  uniforms.uBottom.value.set(bottom)
-  uniforms.uSteep.value = steep
+  useFrame((state, dt) => {
+    uniforms.uTime.value = state.clock.elapsedTime
+    const c = state.gl.domElement
+    uniforms.uRes.value.set(c.width, c.height)
+    const target = useStore.getState().entered ? 1 : 0
+    uniforms.uIntro.value += (target - uniforms.uIntro.value) * (1 - Math.exp(-dt * 0.9))
+  })
 
   return (
     <mesh scale={100}>
@@ -85,21 +87,48 @@ function GradientBackground() {
         depthWrite={false}
         uniforms={uniforms}
         vertexShader={/* glsl */ `
-          varying vec3 vDir;
           void main() {
-            vDir = normalize(position);
             gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
           }
         `}
         fragmentShader={/* glsl */ `
-          uniform vec3 uTop;
-          uniform vec3 uBottom;
-          uniform float uSteep;
-          varying vec3 vDir;
+          uniform vec2 uRes;
+          uniform float uTime;
+          uniform float uIntro;
+          float hash(vec2 p) { return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453); }
           void main() {
-            // 以地平线(y=0)为中心按陡度拉伸，narrow-fov 下也能看到完整过渡
-            float t = smoothstep(0.0, 1.0, clamp(vDir.y * uSteep * 0.5 + 0.95, 0.0, 1.0));
-            gl_FragColor = vec4(mix(uBottom, uTop, t), 1.0);
+            vec2 uv = gl_FragCoord.xy / uRes;
+            float a = uRes.x / uRes.y;
+            float t = uTime * 0.06;
+            // tilt so the light runs in diagonal bands, as in the reference
+            vec2 p = vec2((uv.x - 0.5) * a, uv.y - 0.5);
+            float ang = 0.28;
+            vec2 q = vec2(p.x * cos(ang) - p.y * sin(ang), p.x * sin(ang) + p.y * cos(ang));
+            float w = 0.5 * a;
+            // left band: brightest low on the left edge
+            float open = smoothstep(0.0, 1.0, uIntro);
+            float slide = (1.0 - open) * 0.45 * a; // the bands sweep in from beyond the edges
+            float b1 = exp(-pow((q.x + w * 1.02 + slide + sin(t) * 0.05) / (0.20 * a), 2.0)) * smoothstep(0.55, -0.45, q.y);
+            // right band: brightest on the right edge, upper half
+            float b2 = exp(-pow((q.x - w * 1.0 - slide + cos(t * 0.8) * 0.05) / (0.17 * a), 2.0)) * smoothstep(-0.55, 0.35, q.y);
+            // a faint dark-violet haze through the middle
+            float b3 = exp(-pow((q.x + 0.12 * a + sin(t * 0.6) * 0.04) / (0.26 * a), 2.0)) * 0.22;
+            float L = (b1 * 0.8 + b2 * 0.75) * open + b3 * (0.4 + 0.6 * open);
+            // charcoal ground: greyer top-left and bottom-right, near black down the diagonal
+            float dark = exp(-pow(q.x / (0.42 * a), 2.0));
+            vec3 ground = mix(vec3(0.075, 0.066, 0.085), vec3(0.018, 0.014, 0.024), dark);
+            vec3 deep = vec3(0.12, 0.02, 0.22);
+            vec3 mid = vec3(0.27, 0.05, 0.50);
+            vec3 core = vec3(0.42, 0.13, 0.72);
+            vec3 col = mix(ground, deep, smoothstep(0.03, 0.40, L));
+            col = mix(col, mid, smoothstep(0.35, 0.80, L));
+            col = mix(col, core, smoothstep(0.78, 1.15, L));
+            // film grain, refreshed about 24 times a second
+            float g = hash(floor(gl_FragCoord.xy) + floor(uTime * 24.0) * 1.7) - 0.5;
+            // grain added in screen space so it shows evenly in the darks
+            col = clamp(col + g * (0.06 + (1.0 - open) * 0.14), 0.0, 1.0); // heavy grain on open, settling
+            // colours above are written as on screen; the renderer converts linear to sRGB, so undo that here
+            gl_FragColor = vec4(pow(col, vec3(2.2)), 1.0);
           }
         `}
       />

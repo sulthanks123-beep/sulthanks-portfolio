@@ -3747,3 +3747,201 @@ html.has-cursor select {
 .ex-card-links { display: flex; flex-wrap: wrap; gap: 8px 16px; margin: 18px 0 0; }
 .ex-card-links a { color: #c9b6ff; font-weight: 600; font-size: 15px; text-decoration: none; border-bottom: 1px solid rgba(201, 182, 255, 0.35); }
 .ex-card-links a:hover { color: #fff; border-color: #fff; }
+
+/* ============ Hero opening sequence (plays as the loader fades) ============
+   Title comes into focus, the intro rises, the frame draws itself, the badge spins in. */
+html:not(.is-entered) .about-title,
+html:not(.is-entered) .about-body,
+html:not(.is-entered) .hero-frame,
+html:not(.is-entered) .hero-mark,
+html:not(.is-entered) .hero-meta,
+html:not(.is-entered) .spin-badge,
+html:not(.is-entered) .scroll-cue-label,
+html:not(.is-entered) .scroll-cue-track {
+  opacity: 0;
+}
+.about-intro {
+  animation: none; /* replaced by the sequence below, which waits for the loader */
+}
+html.is-entered .about-title {
+  animation: heroTitleIn 1.6s 0.25s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+html.is-entered .about-body {
+  animation: heroRise 1.3s 0.75s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+html.is-entered .hero-frame {
+  animation: heroFrame 1.4s 0.5s cubic-bezier(0.65, 0, 0.35, 1) both;
+}
+html.is-entered .hero-mark {
+  animation: heroFade 0.8s 1.2s ease both;
+}
+html.is-entered .hero-meta {
+  animation: heroRise 1s 1.1s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+html.is-entered .spin-badge {
+  animation: heroBadge 1.2s 1.3s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+html.is-entered .scroll-cue-label,
+html.is-entered .scroll-cue-track {
+  animation: heroFade 1s 1.6s ease both;
+}
+@keyframes heroTitleIn {
+  from {
+    opacity: 0;
+    filter: blur(18px);
+    transform: translateY(34px) scale(1.08);
+  }
+}
+@keyframes heroRise {
+  from {
+    opacity: 0;
+    filter: blur(8px);
+    transform: translateY(22px);
+  }
+}
+@keyframes heroFrame {
+  from {
+    opacity: 0;
+    clip-path: inset(50% 50% 50% 50%);
+  }
+  to {
+    opacity: 1;
+    clip-path: inset(0 0 0 0);
+  }
+}
+@keyframes heroFade {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes heroBadge {
+  from {
+    opacity: 0;
+    transform: scale(0.4) rotate(-120deg);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  html.is-entered .about-title,
+  html.is-entered .about-body,
+  html.is-entered .hero-frame,
+  html.is-entered .hero-mark,
+  html.is-entered .hero-meta,
+  html.is-entered .spin-badge,
+  html.is-entered .scroll-cue-label,
+  html.is-entered .scroll-cue-track {
+    animation: heroFade 0.6s ease both;
+  }
+}
+
+/* ---- opening sequence, part 2: character, title wipe, word-by-word intro, light sweep ---- */
+html:not(.is-entered) .scene-bg {
+  opacity: 0;
+}
+html.is-entered .scene-bg {
+  animation: heroScene 2.2s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+@keyframes heroScene {
+  from {
+    opacity: 0;
+    transform: scale(1.14);
+    filter: blur(16px) brightness(0.4);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+/* the script title is written in from left to right while it comes into focus */
+html.is-entered .about-title {
+  animation: heroTitleIn 1.8s 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+@keyframes heroTitleIn {
+  from {
+    opacity: 0;
+    filter: blur(14px);
+    transform: translateY(26px) scale(1.06);
+    clip-path: inset(-30% 100% -30% -10%);
+  }
+  60% {
+    opacity: 1;
+  }
+  to {
+    opacity: 1;
+    filter: none;
+    transform: none;
+    clip-path: inset(-30% -10% -30% -10%);
+  }
+}
+/* intro: words rise and sharpen one after another */
+.about-body .hw {
+  display: inline-block;
+  white-space: pre;
+}
+html:not(.is-entered) .about-body .hw {
+  opacity: 0;
+}
+html.is-entered .about-body {
+  animation: none;
+}
+html.is-entered .about-body .hw {
+  animation: heroWord 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: calc(1.05s + var(--i) * 0.035s);
+}
+@keyframes heroWord {
+  from {
+    opacity: 0;
+    filter: blur(6px);
+    transform: translateY(0.7em) rotate(4deg);
+  }
+}
+/* one soft violet light sweeping across the screen as the hero opens */
+.hero-sweep {
+  position: fixed;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  opacity: 0;
+  background: linear-gradient(105deg, transparent 35%, rgba(196, 150, 255, 0.22) 47%, rgba(255, 255, 255, 0.28) 50%, rgba(196, 150, 255, 0.22) 53%, transparent 65%);
+  mix-blend-mode: screen;
+}
+html.is-entered .hero-sweep {
+  animation: heroSweep 1.7s 0.35s cubic-bezier(0.65, 0, 0.35, 1) both;
+}
+@keyframes heroSweep {
+  0% {
+    opacity: 1;
+    transform: translateX(-100%);
+  }
+  85% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+}
+/* the scroll line draws itself down */
+html.is-entered .scroll-cue-track {
+  animation: heroLine 1s 1.9s cubic-bezier(0.65, 0, 0.35, 1) both;
+}
+@keyframes heroLine {
+  from {
+    opacity: 0;
+    clip-path: inset(0 0 100% 0);
+  }
+  to {
+    opacity: 1;
+    clip-path: inset(0 0 0 0);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  html.is-entered .scene-bg,
+  html.is-entered .about-body .hw,
+  html.is-entered .scroll-cue-track {
+    animation: heroFade 0.6s ease both;
+  }
+  html.is-entered .hero-sweep {
+    animation: none;
+  }
+}
