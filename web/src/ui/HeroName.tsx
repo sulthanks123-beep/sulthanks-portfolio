@@ -31,7 +31,9 @@ export default function HeroName() {
       letters.forEach((_, i) => paint(i, WIDE.w, WIDE.g))
       el.style.fontSize = '100px'
       const w = el.getBoundingClientRect().width
-      el.style.fontSize = `${((100 * document.documentElement.clientWidth * 0.985) / w).toFixed(2)}px`
+      // edge to edge, but never so tall on short screens that it runs into the hero text
+      const size = Math.min((100 * document.documentElement.clientWidth * 0.985) / w, window.innerHeight * 0.4)
+      el.style.fontSize = `${size.toFixed(2)}px`
       letters.forEach((_, i) => paint(i, cur[i].w, cur[i].g))
     }
 
