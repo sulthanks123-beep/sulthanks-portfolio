@@ -582,6 +582,18 @@ function Man2({
     }
   })
 
+  // Opening sequence: the character cut-out scales up from 70% to full size once the
+  // loader fades. Only the avatar plane scales (about its centre); the glb camera and focus
+  // anchors live in the same model, so scaling the group would move the camera with it.
+  const grow = useRef(0)
+  useFrame((_, dt) => {
+    const target = useStore.getState().entered ? 1 : 0
+    if (grow.current === target) return
+    grow.current = Math.abs(target - grow.current) < 0.001 ? target : grow.current + (target - grow.current) * (1 - Math.exp(-dt * 3.2))
+    const k = 0.7 + 0.3 * grow.current
+    avatar.scale.setScalar(k)
+  })
+
   return (
     <group
       position={[posX, posY, posZ]}

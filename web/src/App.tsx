@@ -64,7 +64,12 @@ function Hero({ lang, cueOpacity }: { lang: Lang; cueOpacity: MotionValue<number
         {/* 入场动画放内层，避免其 fill 锁住 opacity 覆盖外层滚动 opacity */}
         <div className="about-intro">
           <motion.h1 className="about-title" style={{ y: titleY, letterSpacing: titleSpacing }}>
-            {title}
+            {/* one span per word for the Apple-style word-by-word entrance */}
+            {title.split(' ').map((w, k) => (
+              <span key={k} className="tw" style={{ '--i': k } as React.CSSProperties}>
+                {w}{' '}
+              </span>
+            ))}
             {/* keyword for search engines and screen readers; the visible title stays short */}
             <span className="sr-only">, digital marketer in Dubai</span>
           </motion.h1>
@@ -103,6 +108,30 @@ function LangToggle({ lang, onToggle }: { lang: Lang; onToggle: () => void }) {
 export default function App() {
   const [lang, setLang] = useState<Lang>('en')
   useEffect(() => startSmoothScroll(), [])
+  // Scroll reveals for plain elements below the hero (contact tiles, form lines, footer):
+  // each gets .io, then .io-in the first time it enters view; --j staggers siblings.
+  useEffect(() => {
+    const sel = '.ct-tile, .lead-line, .lead-group, .lead-send, .ft-cta-line, .ft-cta-actions .ft-btn, .ft-col, .wk-gallery-title'
+    const els = Array.from(document.querySelectorAll<HTMLElement>(sel))
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (!e.isIntersecting) continue
+          e.target.classList.add('io-in')
+          io.unobserve(e.target)
+        }
+      },
+      { rootMargin: '0px 0px -10% 0px' }
+    )
+    els.forEach((el) => {
+      const sibs = el.parentElement ? Array.from(el.parentElement.children).filter((c) => c.className === el.className) : [el]
+      el.style.setProperty('--j', String(Math.max(0, sibs.indexOf(el))))
+      el.classList.add('io')
+      io.observe(el)
+    })
+    return () => io.disconnect()
+  }, [])
+
   // once the loader starts to fade, mark the page so the hero's opening sequence plays
   const entered = useStore((s) => s.entered)
   useEffect(() => {

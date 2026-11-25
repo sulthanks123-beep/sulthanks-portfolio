@@ -1,5 +1,5 @@
-import { useState, type FormEvent, type PointerEvent } from 'react'
-import { motion } from 'framer-motion'
+import { useEffect, useRef, useState, type FormEvent, type PointerEvent } from 'react'
+import { animate, motion, useInView } from 'framer-motion'
 import { STATS, SERVICES, STEPS, CREATIVES, TESTIMONIALS, CONTACT, FAQS } from '../data/extras'
 import { Star, TiltedBands, ScrollBanner } from './Banners'
 import { RevealText } from './Flair'
@@ -10,11 +10,37 @@ import BudgetCalc from './BudgetCalc'
 // Content lives in data/extras.ts.
 
 const EASE = [0.22, 1, 0.36, 1]
-const reveal = {
-  initial: { opacity: 0, y: 24 },
-  whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true, margin: '-10% 0px' },
-  transition: { duration: 0.7, ease: EASE },
+// Where the browser can tie animations to scroll (CSS view timelines), styles.css moves the
+// cards with the scroll and these one-shot reveals switch off; elsewhere they play once.
+const SCROLL_TL = typeof CSS !== 'undefined' && CSS.supports('animation-timeline: view()')
+const reveal = SCROLL_TL
+  ? { transition: {} }
+  : {
+      initial: { opacity: 0, y: 56, scale: 0.96 },
+      whileInView: { opacity: 1, y: 0, scale: 1 },
+      viewport: { once: true, margin: '-10% 0px' },
+      transition: { duration: 0.9, ease: EASE },
+    }
+
+// Counts a stat like "₹6.5M" or "20+" up from zero the first time it scrolls into view
+function CountUp({ value }: { value: string }) {
+  const ref = useRef<HTMLSpanElement>(null)
+  const inView = useInView(ref, { once: true, margin: '-10% 0px' })
+  const m = value.match(/^(\D*)([\d.]+)(.*)$/)
+  useEffect(() => {
+    const el = ref.current
+    if (!el || !m || !inView) return
+    const [, pre, num, post] = m
+    const end = parseFloat(num)
+    const dec = (num.split('.')[1] || '').length
+    const c = animate(0 as number, end, { duration: 1.6, ease: EASE as [number, number, number, number], onUpdate: (v: number) => (el.textContent = pre + v.toFixed(dec) + post) })
+    return () => c.stop()
+  }, [inView]) // eslint-disable-line react-hooks/exhaustive-deps
+  return (
+    <span ref={ref} className="ex-stat-value">
+      {value}
+    </span>
+  )
 }
 const BASE = import.meta.env.BASE_URL
 
@@ -38,7 +64,7 @@ function Stats() {
     <section className="ex-section ex-stats" aria-label="Results">
       {STATS.map((s, i) => (
         <motion.div key={s.label} className="ex-stat glass" onPointerMove={spot} style={{ animationDelay: `${i * -1.4}s` }} {...reveal} transition={{ ...reveal.transition, delay: i * 0.08 }}>
-          <span className="ex-stat-value">{s.value}</span>
+          <CountUp value={s.value} />
           <span className="ex-stat-label">{s.label}</span>
         </motion.div>
       ))}
@@ -84,7 +110,15 @@ function Process() {
       <ol className="ex-steps">
         {STEPS.map((s, i) => (
           <motion.li key={s.title} className="ex-step glass" onPointerMove={spot} {...reveal} transition={{ ...reveal.transition, delay: i * 0.08 }}>
-            <span className="ex-step-no">{i + 1}</span>
+            <motion.span
+              className="ex-step-no"
+              initial={SCROLL_TL ? false : { scale: 0 }}
+              whileInView={{ scale: 1 }}
+              viewport={{ once: true, margin: '-10% 0px' }}
+              transition={{ type: 'spring', stiffness: 320, damping: 16, delay: 0.25 + i * 0.08 }}
+            >
+              {i + 1}
+            </motion.span>
             <h3 className="ex-step-title">{s.title}</h3>
             <p className="ex-step-body">{s.body}</p>
           </motion.li>
@@ -121,7 +155,14 @@ function Creatives() {
       <Heading title="Ads I've made" />
       <div className={`ex-grid ex-grid-creatives${CREATIVES.length === 1 ? ' is-single' : ''}`}>
         {CREATIVES.map((c) => (
-          <motion.figure key={c.src} className="ex-creative" {...reveal}>
+          <motion.figure
+            key={c.src}
+            className="ex-creative"
+            initial={SCROLL_TL ? false : { opacity: 0, clipPath: 'inset(100% 0% 0% 0%)' }}
+            whileInView={{ opacity: 1, clipPath: 'inset(0% 0% 0% 0%)' }}
+            viewport={{ once: true, margin: '-10% 0px' }}
+            transition={{ duration: 1.1, ease: EASE }}
+          >
             {c.video ? (
               <video src={BASE + c.src} autoPlay muted loop playsInline aria-label={c.alt} />
             ) : (

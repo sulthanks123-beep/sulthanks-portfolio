@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type Ref } from 'react'
-import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion'
+import { motion, AnimatePresence, useScroll, useTransform, useMotionValueEvent } from 'framer-motion'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import rehypeRaw from 'rehype-raw'
@@ -248,6 +248,28 @@ export default function Works({ lang, innerRef }: { lang: 'en' | 'zh'; innerRef:
 
   // px 数值插值（比 vw 字符串更顺）；竖滚行程与横移 1:1
   const x = useTransform(scrollYProgress, [0, 1], [0, -scrollRange])
+  // Depth while the row slides: each card gets --k (share of it on screen, 0 to 1) and
+  // --d (signed distance from centre) so its text and cover drift and sharpen as it arrives.
+  const updateDepth = () => {
+    const el = trackRef.current
+    if (!el) return
+    const vw = window.innerWidth
+    for (const c of Array.from(el.children) as HTMLElement[]) {
+      const r = c.getBoundingClientRect()
+      const d = Math.max(-1, Math.min(1, (r.left + r.width / 2 - vw / 2) / vw))
+      // k = share of the card on screen, so a card fully in view is fully lit wherever it sits
+      const seen = Math.max(0, Math.min(r.right, vw) - Math.max(r.left, 0)) / Math.min(r.width, vw)
+      c.style.setProperty('--d', d.toFixed(3))
+      c.style.setProperty('--k', Math.min(1, seen).toFixed(3))
+    }
+  }
+  useMotionValueEvent(x, 'change', updateDepth)
+  useEffect(() => {
+    updateDepth()
+    window.addEventListener('resize', updateDepth)
+    return () => window.removeEventListener('resize', updateDepth)
+  })
+
   // 横移到底时「继续下滑」提示渐隐
   const hintOpacity = useTransform(scrollYProgress, [0.85, 1], [1, 0])
 

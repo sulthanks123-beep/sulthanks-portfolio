@@ -1,3 +1,4 @@
+import type React from 'react'
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { CONTACT } from '../data/extras'
@@ -51,7 +52,13 @@ export default function Footer() {
       <div className="ft-glow" aria-hidden="true" />
 
       <div className="ft-cta">
-        <p className="ft-cta-line">Got a brand to grow?</p>
+        <p className="ft-cta-line">
+          {'Got a brand to grow?'.split(' ').map((w, k) => (
+            <span key={k} className="fw" style={{ '--i': k } as React.CSSProperties}>
+              {w}{' '}
+            </span>
+          ))}
+        </p>
         <div className="ft-cta-actions">
           <a className="ft-btn ft-btn-main" href={CONTACT.whatsapp} target="_blank" rel="noopener noreferrer" data-magnetic>
             Message me on WhatsApp

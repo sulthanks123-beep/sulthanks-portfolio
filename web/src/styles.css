@@ -3945,3 +3945,365 @@ html.is-entered .scroll-cue-track {
     animation: none;
   }
 }
+
+/* ============ Opening sequence v3 (Apple-style) ============
+   Header drops in from the top, words rise one at a time from faint to solid,
+   the badge scales up, and the character grows from 70% (in Scene.tsx). */
+@keyframes appleWord {
+  from {
+    opacity: 0;
+    transform: translateY(0.6em);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes headerDrop {
+  from {
+    opacity: 0;
+    transform: translateY(-140%);
+  }
+}
+@keyframes scaleUp {
+  from {
+    opacity: 0;
+    transform: scale(0);
+  }
+  70% {
+    opacity: 1;
+    transform: scale(1.06);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+/* character: the 3D scene only fades in now; the scale-up happens on the model itself */
+html.is-entered .scene-bg {
+  animation: heroFade 1s ease both;
+}
+/* 1. header drops from the top */
+html.is-entered .hero-meta.hm-tl,
+html.is-entered .hero-meta.hm-tr {
+  animation: headerDrop 1s 0.15s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+/* 3. title and intro: one word at a time from below, faint to solid */
+.about-title .tw,
+.about-body .hw {
+  display: inline-block;
+  white-space: pre;
+}
+html:not(.is-entered) .about-title .tw {
+  opacity: 0;
+}
+html.is-entered .about-title {
+  animation: none;
+}
+html.is-entered .about-title .tw {
+  animation: appleWord 1s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: calc(0.45s + var(--i) * 0.16s);
+}
+html.is-entered .about-body .hw {
+  animation: appleWord 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: calc(0.85s + var(--i) * 0.045s);
+}
+/* 2. the badge, the hero's only button, scales up */
+html.is-entered .spin-badge {
+  animation: scaleUp 0.9s 1.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@media (prefers-reduced-motion: reduce) {
+  html.is-entered .hero-meta.hm-tl,
+  html.is-entered .hero-meta.hm-tr,
+  html.is-entered .about-title .tw,
+  html.is-entered .about-body .hw,
+  html.is-entered .spin-badge {
+    animation: heroFade 0.6s ease both;
+  }
+}
+
+/* ============ Scroll animations: Works to contact ============ */
+/* Works: each panel's text and cover drift and sharpen as it reaches the centre (--k, --d from Works.tsx) */
+.wk-card {
+  --k: 1;
+  --d: 0;
+}
+.wk-card-head {
+  opacity: calc(0.35 + 0.65 * var(--k));
+  transform: translateX(calc(var(--d) * -70px));
+}
+.wk-card-cover {
+  transform: translateX(calc(var(--d) * 50px)) scale(calc(0.86 + 0.14 * var(--k)));
+  transform-origin: 50% 100%;
+}
+.wk-card-cover img {
+  transform: scale(calc(1.18 - 0.18 * var(--k))) translateX(calc(var(--d) * -24px));
+}
+/* plain elements revealed by App.tsx's observer */
+.io {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1), transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: calc(var(--j, 0) * 0.08s);
+}
+.io.io-in {
+  opacity: 1;
+  transform: none;
+}
+/* contact tiles slide in from the right, one after another */
+.ct-tile.io {
+  transform: translateX(60px);
+}
+/* footer buttons scale up, like the hero */
+.ft-cta-actions .ft-btn.io {
+  transform: scale(0.6);
+  transition-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition-delay: calc(0.5s + var(--j, 0) * 0.1s);
+}
+/* footer headline: Apple-style, one word at a time */
+.ft-cta-line.io {
+  opacity: 1;
+  transform: none;
+}
+.ft-cta-line .fw {
+  display: inline-block;
+  white-space: pre;
+  opacity: 0;
+  transform: translateY(0.6em);
+  transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1), transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: calc(var(--i) * 0.12s);
+}
+.ft-cta-line.io-in .fw {
+  opacity: 1;
+  transform: none;
+}
+/* the "Works" title grows into place */
+.wk-gallery-title.io {
+  transform: translateY(30px) scale(0.85);
+  transform-origin: 0 100%;
+}
+@media (prefers-reduced-motion: reduce) {
+  .wk-card-head,
+  .wk-card-cover,
+  .wk-card-cover img {
+    transform: none;
+    opacity: 1;
+  }
+  .io,
+  .ct-tile.io,
+  .ft-cta-actions .ft-btn.io,
+  .wk-gallery-title.io,
+  .ft-cta-line .fw {
+    transform: none;
+    transition: opacity 0.6s ease;
+  }
+}
+
+/* ============ Scroll-linked motion and section transitions (Works to footer) ============
+   Only where the browser supports scroll-driven animations; elsewhere the one-shot
+   reveals above still play. Everything moves with the scroll, forwards and back. */
+@supports (animation-timeline: view()) {
+  /* each section rises and sharpens as it comes in, then settles back and dims as it leaves */
+  .ex-section,
+  .calc,
+  .ft-cta {
+    animation: secIn linear both, secOut linear forwards;
+    animation-timeline: view(), view();
+    animation-range: entry 0% entry 80%, exit 15% exit 100%;
+  }
+  @keyframes secIn {
+    from {
+      opacity: 0.2;
+      translate: 0 90px;
+      scale: 0.94;
+    }
+    to {
+      opacity: 1;
+      translate: 0 0;
+      scale: 1;
+    }
+  }
+  @keyframes secOut {
+    from {
+      opacity: 1;
+      scale: 1;
+      filter: blur(0);
+    }
+    to {
+      opacity: 0.25;
+      scale: 0.95;
+      filter: blur(6px);
+    }
+  }
+  /* cards and tiles rise into place in step with the scroll, later columns a little behind */
+  .ex-stat,
+  .ex-card,
+  .ex-step,
+  .ex-quote,
+  .ex-creative,
+  .faq-item,
+  .calc-card,
+  .ex-contact-side,
+  .lead,
+  .ct-tile,
+  .ft-col {
+    animation: cardIn linear both;
+    animation-timeline: view();
+    animation-range: entry 5% cover 32%;
+  }
+  .ex-stat:nth-child(2),
+  .ex-card:nth-child(2),
+  .ex-step:nth-child(2),
+  .ex-quote:nth-child(2),
+  .ft-col:nth-child(2),
+  .ct-tile:nth-child(2) {
+    animation-range: entry 12% cover 38%;
+  }
+  .ex-stat:nth-child(3),
+  .ex-card:nth-child(3),
+  .ex-step:nth-child(3),
+  .ex-quote:nth-child(3),
+  .ft-col:nth-child(3),
+  .ct-tile:nth-child(3) {
+    animation-range: entry 19% cover 44%;
+  }
+  .ex-stat:nth-child(4),
+  .ex-card:nth-child(4),
+  .ex-step:nth-child(4),
+  .ft-col:nth-child(4) {
+    animation-range: entry 26% cover 50%;
+  }
+  @keyframes cardIn {
+    from {
+      opacity: 0;
+      translate: 0 80px;
+      scale: 0.92;
+    }
+    to {
+      opacity: 1;
+      translate: 0 0;
+      scale: 1;
+    }
+  }
+  /* contact tiles come in from the right instead */
+  .ct-tile {
+    animation-name: tileIn;
+  }
+  @keyframes tileIn {
+    from {
+      opacity: 0;
+      translate: 70px 0;
+    }
+    to {
+      opacity: 1;
+      translate: 0 0;
+    }
+  }
+  /* creatives wipe upward as you scroll */
+  .ex-creative {
+    animation-name: wipeUp;
+  }
+  @keyframes wipeUp {
+    from {
+      clip-path: inset(100% 0 0 0);
+    }
+    to {
+      clip-path: inset(0 0 0 0);
+    }
+  }
+  /* footer headline: words rise one after another as you scroll */
+  .ft-cta-line .fw {
+    opacity: 1;
+    transform: none;
+    transition: none;
+    animation: wordIn linear both;
+    animation-timeline: view();
+    animation-range: entry calc(10% + var(--i) * 12%) cover calc(25% + var(--i) * 8%);
+  }
+  @keyframes wordIn {
+    from {
+      opacity: 0;
+      translate: 0 0.7em;
+    }
+    to {
+      opacity: 1;
+      translate: 0 0;
+    }
+  }
+  /* the one-shot observer reveals hand over to the scroll versions above */
+  .io,
+  .ct-tile.io,
+  .ft-cta-actions .ft-btn.io,
+  .wk-gallery-title.io {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .ft-cta-actions .ft-btn {
+    animation: btnIn linear both;
+    animation-timeline: view();
+    animation-range: entry 20% cover 40%;
+  }
+  @keyframes btnIn {
+    from {
+      opacity: 0;
+      scale: 0.6;
+    }
+    to {
+      opacity: 1;
+      scale: 1;
+    }
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ex-section,
+  .calc,
+  .ft-cta,
+  .ex-stat,
+  .ex-card,
+  .ex-step,
+  .ex-quote,
+  .ex-creative,
+  .faq-item,
+  .calc-card,
+  .ex-contact-side,
+  .lead,
+  .ct-tile,
+  .ft-col,
+  .ft-cta-line .fw,
+  .ft-cta-actions .ft-btn {
+    animation: none;
+  }
+}
+/* stat cards keep their gentle float (it uses `translate`), so their scroll entrance uses `transform` */
+@supports (animation-timeline: view()) {
+  .ex-stat {
+    animation: exFloat 3.4s ease-in-out infinite alternate, statIn linear both;
+    animation-timeline: auto, view();
+    animation-range: normal, entry 5% cover 32%;
+  }
+  .ex-stat:nth-child(2) {
+    animation-range: normal, entry 12% cover 38%;
+  }
+  .ex-stat:nth-child(3) {
+    animation-range: normal, entry 19% cover 44%;
+  }
+  .ex-stat:nth-child(4) {
+    animation-range: normal, entry 26% cover 50%;
+  }
+  @keyframes statIn {
+    from {
+      opacity: 0;
+      transform: translateY(80px) scale(0.92);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ex-stat {
+    animation: none;
+  }
+}
