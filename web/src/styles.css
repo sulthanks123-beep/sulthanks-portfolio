@@ -4307,3 +4307,23 @@ html.is-entered .spin-badge {
     animation: none;
   }
 }
+/* phones: sections leave without the blur, which is costly on mobile GPUs and can stutter */
+@supports (animation-timeline: view()) {
+  @media (max-width: 760px) {
+    .ex-section,
+    .calc,
+    .ft-cta {
+      animation-name: secIn, secOutLite;
+    }
+    @keyframes secOutLite {
+      from {
+        opacity: 1;
+        scale: 1;
+      }
+      to {
+        opacity: 0.3;
+        scale: 0.96;
+      }
+    }
+  }
+}
