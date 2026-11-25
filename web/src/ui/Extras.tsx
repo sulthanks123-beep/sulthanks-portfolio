@@ -1,3 +1,4 @@
+import type React from 'react'
 import { useEffect, useRef, useState, type FormEvent, type PointerEvent } from 'react'
 import { animate, motion, useInView } from 'framer-motion'
 import { STATS, SERVICES, STEPS, CREATIVES, TESTIMONIALS, CONTACT, FAQS } from '../data/extras'
@@ -72,13 +73,49 @@ function Stats() {
   )
 }
 
+// Stacking cards: each service card pins as you scroll and the next slides over it. --cover
+// (0 to 1) is how much of a card the next one hides; the CSS sinks and darkens it by that.
+function useStack() {
+  const ref = useRef<HTMLDivElement>(null)
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    let raf = 0
+    const tick = () => {
+      raf = 0
+      const cards = Array.from(el.children) as HTMLElement[]
+      cards.forEach((c, i) => {
+        const next = cards[i + 1]
+        if (!next) return c.style.setProperty('--cover', '0')
+        const a = c.getBoundingClientRect()
+        const b = next.getBoundingClientRect()
+        const cover = Math.max(0, Math.min(1, (a.bottom - b.top) / a.height))
+        c.style.setProperty('--cover', cover.toFixed(3))
+      })
+    }
+    const onScroll = () => {
+      if (!raf) raf = requestAnimationFrame(tick)
+    }
+    tick()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    window.addEventListener('resize', onScroll)
+    return () => {
+      cancelAnimationFrame(raf)
+      window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('resize', onScroll)
+    }
+  }, [])
+  return ref
+}
+
 function Services() {
+  const stackRef = useStack()
   return (
     <section className="ex-section" id="services">
       <Heading title="How I can help" />
-      <div className="ex-grid ex-grid-services">
+      <div className="ex-grid ex-grid-services" ref={stackRef}>
         {SERVICES.map((s, i) => (
-          <motion.article key={s.title} className="ex-card glass" onPointerMove={spot} {...reveal} transition={{ ...reveal.transition, delay: i * 0.06 }}>
+          <article key={s.title} className="ex-card glass" onPointerMove={spot} style={{ '--n': i } as React.CSSProperties}>
             <Star className="ex-card-icon" />
             <h3 className="ex-card-title">{s.title}</h3>
             <p className="ex-card-body">{s.body}</p>
@@ -96,7 +133,7 @@ function Services() {
                 ))}
               </p>
             )}
-          </motion.article>
+          </article>
         ))}
       </div>
     </section>

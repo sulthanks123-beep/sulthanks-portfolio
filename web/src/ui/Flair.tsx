@@ -84,12 +84,16 @@ export function ScrambleText({ text, className }: { text: string; className?: st
   )
 }
 
-// Headline whose words slide up out of a mask, one after another, when it scrolls into view.
-// The heading itself is what's watched (the words start clipped inside their masks, so
-// they can't be observed directly); it passes "show" down to each word.
-const wordV = {
-  hidden: { y: '110%' },
-  show: (i: number) => ({ y: '0%', transition: { duration: 0.9, ease: [0.22, 1, 0.36, 1], delay: i * 0.08 } }),
+// Headline whose letters flip up in 3D one after another, like a departure board, when it
+// scrolls into view. The heading is what's watched; it passes "show" down to each letter.
+const letterV = {
+  hidden: { rotateX: -95, y: '40%', opacity: 0 },
+  show: (i: number) => ({
+    rotateX: 0,
+    y: '0%',
+    opacity: 1,
+    transition: { duration: 0.9, ease: [0.22, 1, 0.36, 1], delay: i * 0.028 },
+  }),
 }
 
 export function RevealText({ text, as = 'h2', className }: { text: string; as?: 'h1' | 'h2' | 'h3'; className?: string }) {
@@ -104,16 +108,21 @@ export function RevealText({ text, as = 'h2', className }: { text: string; as?: 
       whileInView="show"
       viewport={{ once: true, margin: '-8% 0px' }}
     >
-      {words.map((w, i) => (
-        <Fragment key={i}>
-          <span className="rv-mask" aria-hidden="true">
-            <motion.span className="rv-word" variants={wordV} custom={i}>
-              {w}
-            </motion.span>
-          </span>
-          {i < words.length - 1 ? ' ' : null}
-        </Fragment>
-      ))}
+      {words.map((w, i) => {
+        const start = words.slice(0, i).join('').length + i // letter index where this word starts
+        return (
+          <Fragment key={i}>
+            <span className="rv-flip-word" aria-hidden="true">
+              {Array.from(w).map((ch, k) => (
+                <motion.span key={k} className="rv-letter" variants={letterV} custom={start + k}>
+                  {ch}
+                </motion.span>
+              ))}
+            </span>
+            {i < words.length - 1 ? ' ' : null}
+          </Fragment>
+        )
+      })}
     </Tag>
   )
 }

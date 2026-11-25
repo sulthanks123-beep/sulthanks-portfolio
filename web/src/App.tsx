@@ -132,6 +132,47 @@ export default function App() {
     return () => io.disconnect()
   }, [])
 
+  // Glass cards tilt toward the cursor (mouse only); the CSS reads --rx/--ry
+  useEffect(() => {
+    if (!window.matchMedia('(pointer: fine)').matches || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    const SEL = '.ex-card, .ex-step, .ex-quote, .calc-card, .lead, .ex-contact-side'
+    let cur: HTMLElement | null = null
+    const onMove = (e: PointerEvent) => {
+      const el = (e.target as Element | null)?.closest?.(SEL) as HTMLElement | null
+      if (cur && cur !== el) {
+        cur.style.setProperty('--rx', '0deg')
+        cur.style.setProperty('--ry', '0deg')
+      }
+      cur = el
+      if (!el) return
+      const r = el.getBoundingClientRect()
+      const px = (e.clientX - r.left) / r.width - 0.5
+      const py = (e.clientY - r.top) / r.height - 0.5
+      el.style.setProperty('--rx', `${(-py * 7).toFixed(2)}deg`)
+      el.style.setProperty('--ry', `${(px * 9).toFixed(2)}deg`)
+    }
+    window.addEventListener('pointermove', onMove, { passive: true })
+    return () => window.removeEventListener('pointermove', onMove)
+  }, [])
+
+  // Headings lean with scroll speed and settle back when scrolling stops (--lean on the root)
+  useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    let last = window.scrollY
+    let lean = 0
+    let raf = 0
+    const tick = () => {
+      const y = window.scrollY
+      const v = y - last // px per frame
+      last = y
+      lean += (Math.max(-6, Math.min(6, v * 0.18)) - lean) * 0.12
+      document.documentElement.style.setProperty('--lean', `${lean.toFixed(2)}deg`)
+      raf = requestAnimationFrame(tick)
+    }
+    raf = requestAnimationFrame(tick)
+    return () => cancelAnimationFrame(raf)
+  }, [])
+
   // once the loader starts to fade, mark the page so the hero's opening sequence plays
   const entered = useStore((s) => s.entered)
   useEffect(() => {
