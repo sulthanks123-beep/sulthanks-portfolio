@@ -404,7 +404,7 @@ function ContactTiles() {
           </span>
           <span className="ct-text">
             <span className="ct-label">Email</span>
-            <span className="ct-value">{CONTACT.email}</span>
+            <span className="ct-value is-email">{CONTACT.email.replace("@", "@\u200b")}</span>
           </span>
         </a>
         <button

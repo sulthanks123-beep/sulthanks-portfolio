@@ -3330,8 +3330,8 @@ html.has-cursor select {
   gap: 8px;
   padding: 8px 8px 8px 10px;
   border-radius: 18px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.05);
   transition: border-color 0.25s ease, background 0.25s ease, translate 0.35s cubic-bezier(0.22, 1, 0.36, 1),
     box-shadow 0.25s ease;
 }
@@ -3401,7 +3401,7 @@ html.has-cursor select {
   align-items: center;
   gap: 8px;
   font-size: 12px;
-  color: rgba(244, 241, 234, 0.55);
+  color: rgba(244, 241, 234, 0.7);
 }
 
 .ct-tag {
@@ -4054,7 +4054,10 @@ html.is-entered .spin-badge {
 }
 /* contact tiles slide in from the right, one after another */
 .ct-tile.io {
-  transform: translateX(60px);
+  transform: translateX(40px);
+}
+.ct-tile.io.io-in {
+  transform: none;
 }
 /* footer buttons scale up, like the hero */
 .ft-cta-actions .ft-btn.io {
@@ -4147,7 +4150,6 @@ html.is-entered .spin-badge {
   .calc-card,
   .ex-contact-side,
   .lead,
-  .ct-tile,
   .ft-col {
     animation: cardIn linear both;
     animation-timeline: view();
@@ -4157,16 +4159,14 @@ html.is-entered .spin-badge {
   .ex-card:nth-child(2),
   .ex-step:nth-child(2),
   .ex-quote:nth-child(2),
-  .ft-col:nth-child(2),
-  .ct-tile:nth-child(2) {
+  .ft-col:nth-child(2) {
     animation-range: entry 12% cover 38%;
   }
   .ex-stat:nth-child(3),
   .ex-card:nth-child(3),
   .ex-step:nth-child(3),
   .ex-quote:nth-child(3),
-  .ft-col:nth-child(3),
-  .ct-tile:nth-child(3) {
+  .ft-col:nth-child(3) {
     animation-range: entry 19% cover 44%;
   }
   .ex-stat:nth-child(4),
@@ -4185,20 +4185,6 @@ html.is-entered .spin-badge {
       opacity: 1;
       translate: 0 0;
       scale: 1;
-    }
-  }
-  /* contact tiles come in from the right instead */
-  .ct-tile {
-    animation-name: tileIn;
-  }
-  @keyframes tileIn {
-    from {
-      opacity: 0;
-      translate: 70px 0;
-    }
-    to {
-      opacity: 1;
-      translate: 0 0;
     }
   }
   /* creatives wipe upward as you scroll */
@@ -4232,9 +4218,8 @@ html.is-entered .spin-badge {
       translate: 0 0;
     }
   }
-  /* the one-shot observer reveals hand over to the scroll versions above */
-  .io,
-  .ct-tile.io,
+  /* the one-shot observer reveals hand over to the scroll versions above (contact tiles keep theirs) */
+  .io:not(.ct-tile),
   .ft-cta-actions .ft-btn.io,
   .wk-gallery-title.io {
     opacity: 1;
@@ -4692,4 +4677,12 @@ html.is-entered .spin-badge {
   .faq-item::details-content {
     transition: none;
   }
+}
+
+/* the email shows in full: slightly smaller, and it may break after the @ on narrow phones */
+.ct-value.is-email {
+  font-size: 14px;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  line-height: 1.3;
 }
