@@ -90,10 +90,10 @@ export const TESTIMONIALS: Testimonial[] = []
 
 export const CONTACT = {
   email: 'sulthansalavudeen@gmail.com',
-  whatsapp: 'https://wa.me/919745850621',
-  whatsappLabel: 'WhatsApp +91 97458 50621',
-  phone: 'tel:+971506052016',
-  phoneLabel: 'Call (UAE) +971 50 605 2016',
+  whatsapp: 'https://wa.me/971503922605',
+  whatsappLabel: 'WhatsApp +971 50 392 2605',
+  phone: 'tel:+971503922605',
+  phoneLabel: 'Call (UAE) +971 50 392 2605',
   linkedin: 'https://www.linkedin.com/in/sulthan-ks/',
   instagram: 'https://www.instagram.com/_.sulth4n._/',
   google: 'https://share.google/tU1VPpkIisabcFRtt', // Google Business Profile

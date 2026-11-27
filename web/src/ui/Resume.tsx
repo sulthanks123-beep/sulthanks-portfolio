@@ -10,8 +10,8 @@ const CONTACT_LINKS = [
   { id: 'linkedin', label: 'LinkedIn', href: 'https://www.linkedin.com/in/sulthan-ks/' },
   { id: 'instagram', label: 'Instagram @_.sulth4n._', href: 'https://www.instagram.com/_.sulth4n._/' },
   { id: 'email', label: 'sulthansalavudeen@gmail.com', href: 'mailto:sulthansalavudeen@gmail.com' },
-  { id: 'phone', label: 'Call (UAE) +971 50 605 2016', href: 'tel:+971506052016' },
-  { id: 'whatsapp', label: 'WhatsApp (India) +91 97458 50621', href: 'https://wa.me/919745850621' },
+  { id: 'phone', label: 'Call (UAE) +971 50 392 2605', href: 'tel:+971503922605' },
+  { id: 'whatsapp', label: 'WhatsApp +971 50 392 2605', href: 'https://wa.me/971503922605' },
 ]
 
 // Résumé data. Each entry lines up with one camera stop in the 3D model
@@ -112,7 +112,7 @@ const ENTRIES: ResumeEntry[] = [
         heading: 'Get in touch',
         items: [
           'sulthansalavudeen@gmail.com',
-          'UAE +971 50 605 2016 · WhatsApp (India) +91 97458 50621',
+          'WhatsApp or call +971 50 392 2605',
         ],
         links: CONTACT_LINKS,
       },

@@ -375,7 +375,7 @@ function ContactTiles() {
             <span className="ct-label">
               WhatsApp <span className="ct-tag">Fastest reply</span>
             </span>
-            <span className="ct-value">+91 97458 50621</span>
+            <span className="ct-value">+971 50 392 2605</span>
           </span>
         </a>
         <a className="ct-act" href={CONTACT.whatsapp} target="_blank" rel="noopener noreferrer" tabIndex={-1} aria-hidden="true">
@@ -389,7 +389,7 @@ function ContactTiles() {
           </span>
           <span className="ct-text">
             <span className="ct-label">Call (UAE)</span>
-            <span className="ct-value">+971 50 605 2016</span>
+            <span className="ct-value">+971 50 392 2605</span>
           </span>
         </a>
         <button type="button" className="ct-act" onClick={() => copy('phone', phone, CONTACT.phone)} aria-label="Copy phone number">
